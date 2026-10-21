@@ -1,0 +1,6 @@
+export function formatPrice(minor: number) {
+  return `৳ ${new Intl.NumberFormat("en-US", { minimumFractionDigits: minor % 100 ? 2 : 0, maximumFractionDigits: 2 }).format(minor / 100)}`;
+}
+const labels: Record<string, string> = { tdp: "TDP (W)", ramType: "RAM type", formFactor: "Form factor", socket: "Socket", m2Slots: "M.2 slots", lengthMm: "Length (mm)", coolerHeightMm: "Cooler height / clearance (mm)", wattage: "Power (W)", capacityGb: "Capacity (GB)", vramGb: "VRAM (GB)", speedMts: "Speed (MT/s)", boostGHz: "Boost (GHz)", gpuClearanceMm: "GPU clearance (mm)", maxRamGb: "Maximum RAM (GB)", maxRamSpeedMts: "Maximum RAM speed (MT/s)", readMBps: "Read speed (MB/s)", radiatorMm: "Radiator (mm)", radiatorSupportMm: "Radiator support (mm)", sizeMm: "Size (mm)", airflowCfm: "Airflow (CFM)", refreshHz: "Refresh rate (Hz)", weightGrams: "Weight (g)", capacityVa: "Capacity (VA)" };
+export const specLabel = (key: string) => labels[key] ?? key.replace(/([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
+export const specValue = (value: unknown) => value === null || value === undefined ? "Unknown — not verified" : Array.isArray(value) ? value.join(", ") : typeof value === "boolean" ? value ? "Yes" : "No" : String(value);

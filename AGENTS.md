@@ -1,0 +1,3 @@
+# FUTERA backend
+
+Node.js + Express + strict TypeScript + MongoDB. This repository owns authentication, authorization, pricing, stock, coupons, orders and final compatibility checks. Frontend lives in the separate FUTERA repository. Keep pure compatibility rules free of HTTP/DB imports. Validate all input with Zod. Never trust client prices or roles. Preserve labeled development fixtures until verified catalog content is available. Never commit secrets or real customer data. English conventional commits; push/deployment authorized by the user for this upgrade. Run lint, typecheck, test and build before reporting completion. Do not claim unverified deployment or payment success.

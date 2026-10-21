@@ -1,0 +1,48 @@
+
+import mongoose from "mongoose";
+import {createHmac,randomUUID,timingSafeEqual} from "node:crypto";
+import {env} from "../lib/env.ts";
+import {CartModel,CouponModel,OrderModel} from "./models/commerce.ts";
+import {ProductModel} from "./models/catalog.ts";
+import {ownerKey} from "./cart.ts";
+import {parseReferences} from "../features/builder/schema.ts";
+import {checkoutSchema,type CheckoutInput} from "../features/checkout/schema.ts";
+import {calculateOrder,type Coupon,type PricedProduct} from "../features/checkout/pricing.ts";
+import {SettingModel} from "./models/admin.ts";
+import {shippingSettings} from "./settings.ts";
+const sign=(value:string)=>createHmac("sha256",env.AUTH_SECRET!).update(value).digest("hex");
+async function price(owner:string,input:CheckoutInput,session?:mongoose.ClientSession){
+  const cart=await CartModel.findById(owner).session(session??null);
+  const refs=parseReferences(cart?.refs.map(r=>({id:r.id,quantity:r.quantity})));
+  const products=await ProductModel.find({slug:{$in:refs.map(r=>r.id)}}).session(session??null).lean() as unknown as PricedProduct[];
+  const coupon=input.coupon?await CouponModel.findById(input.coupon).session(session??null):null;
+  if(input.coupon&&!coupon)throw Error("Coupon not found.");
+  const shipping=await shippingSettings(session);
+  return calculateOrder(refs,products,coupon?.toObject() as Coupon|null,input.method==="home"?shipping.homeMinor:shipping.pickupMinor);
+}
+export async function reviewCheckout(input:CheckoutInput){
+  const owner=await ownerKey(true);const quote=await price(owner!,input);const payload=JSON.stringify({owner,input,quote,expires:Date.now()+600000,requestId:randomUUID()});
+  return {quote,token:Buffer.from(payload).toString("base64url")+"."+sign(payload)};
+}
+export async function placeOrder(token:string){
+  if(token.length>30000)throw Error("Invalid quote.");const [encoded,signature]=token.split(".");if(!encoded||!signature)throw Error("Invalid quote.");
+  const payload=Buffer.from(encoded,"base64url").toString("utf8"),actual=Buffer.from(sign(payload)),expected=Buffer.from(signature);
+  if(actual.length!==expected.length||!timingSafeEqual(actual,expected))throw Error("Invalid quote.");
+  const saved=JSON.parse(payload);const input=checkoutSchema.parse(saved.input);const owner=await ownerKey();
+  if(!owner||owner!==saved.owner||saved.expires<Date.now())throw Error("Quote expired. Review again.");
+  const existing=await OrderModel.findOne({ownerKey:owner,requestId:saved.requestId});if(existing)return existing._id;
+  let orderId="";
+ await SettingModel.updateOne({_id:"mutation-lock"},{$setOnInsert:{value:{},revision:0}},{upsert:true});
+  await mongoose.connection.transaction(async session=>{
+    const previous=await OrderModel.findOne({ownerKey:owner,requestId:saved.requestId}).session(session);if(previous){orderId=previous._id;return;}
+    // Serialize admin configuration changes with final checkout validation.
+    await SettingModel.updateOne({_id:"mutation-lock"},{$inc:{revision:1}},{session});
+    const quote=await price(owner!,input,session);
+    if(JSON.stringify(quote)!==JSON.stringify(saved.quote))throw Error("Price, stock or discount changed. Review your order again.");
+    for(const line of quote.lines){const result=await ProductModel.updateOne({slug:line.id,active:true,priceMinor:line.unitMinor,stock:{$gte:line.quantity}},{$inc:{stock:-line.quantity}},{session});if(result.modifiedCount!==1)throw Error("Stock changed. Review your cart.");}
+    if(input.coupon){const used=await CouponModel.updateOne({_id:input.coupon,$expr:{$lt:["$used","$maxUses"]}},{$inc:{used:1}},{session});if(used.modifiedCount!==1)throw Error("Coupon exhausted.");}
+    orderId=randomUUID();await OrderModel.create([{_id:orderId,ownerKey:owner,requestId:saved.requestId,...quote,address:input.address,method:input.method,coupon:input.coupon,payment:"COD",paymentStatus:"unpaid",status:"Confirmed",timeline:[{status:"Confirmed",at:new Date()}]}],{session});
+    await CartModel.updateOne({_id:owner},{$set:{refs:[]}},{session});
+  });
+  return orderId;
+}

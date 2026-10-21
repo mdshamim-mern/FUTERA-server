@@ -1,0 +1,12 @@
+import {expect,it} from "vitest";
+import {calculateOrder,type Coupon} from "@/features/checkout/pricing";
+import {addressSchema} from "@/features/checkout/schema";
+import {hashPassword,verifyPassword} from "@/lib/password";
+const refs=[{id:"sample-cpu",quantity:2}],products=[{slug:"sample-cpu",name:"SAMPLE CPU",priceMinor:10001,stock:2,active:true,isSample:true}];
+const coupon:Coupon={percent:10,minimumMinor:20000,maximumDiscountMinor:5000,startsAt:0,endsAt:200,used:0,maxUses:1,active:true,sampleOnly:true};
+it("uses server unit prices, integer discount rounding and configured shipping",()=>{expect(calculateOrder(refs,products,coupon,10000,100)).toMatchObject({subtotalMinor:20002,discountMinor:2000,shippingMinor:10000,totalMinor:28002});});
+it.each([{}, {active:false}, {stock:1}])("rejects missing, inactive and insufficient inventory %j",override=>{const p=Object.keys(override).length?[{...products[0],...override}]:[];expect(()=>calculateOrder(refs,p,null,0)).toThrow();});
+it.each([{used:1},{active:false},{startsAt:101},{endsAt:100},{minimumMinor:20003}])("rejects ineligible coupon %j",override=>expect(()=>calculateOrder(refs,products,{...coupon,...override},0,100)).toThrow());
+it("caps discounts and rejects sample coupon against live goods",()=>{expect(calculateOrder(refs,products,{...coupon,maximumDiscountMinor:100},0,100).discountMinor).toBe(100);expect(()=>calculateOrder(refs,[{...products[0],isSample:false}],coupon,0,100)).toThrow();});
+it("rejects invalid BD phone and forged district/upazila relationships",()=>{expect(addressSchema.safeParse({name:"Sample",phone:"+8801712345678",division:"6",district:"999",upazila:"999",street:"SAMPLE street"}).success).toBe(false);});
+it("salts password hashes and verifies with no plaintext persistence",async()=>{const a=await hashPassword("sample-password-long"),b=await hashPassword("sample-password-long");expect(a).not.toBe(b);expect(a).not.toContain("sample-password-long");expect(await verifyPassword("sample-password-long",a)).toBe(true);expect(await verifyPassword("incorrect",a)).toBe(false);});

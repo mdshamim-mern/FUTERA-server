@@ -1,6 +1,6 @@
 import express,{type Request,type Response,type NextFunction} from "express";
 import cors from "cors";
-import helmet from "helmet";
+import {contentSecurityPolicy,crossOriginOpenerPolicy,crossOriginResourcePolicy,originAgentCluster,referrerPolicy,strictTransportSecurity,xContentTypeOptions,xDnsPrefetchControl,xDownloadOptions,xFrameOptions,xPermittedCrossDomainPolicies,xPoweredBy,xXssProtection} from "helmet";
 import {randomUUID} from "node:crypto";
 import {z} from "zod";
 import {context} from "./platform.ts";
@@ -22,7 +22,7 @@ import {AuditModel} from "./server/models/admin.ts";
 import {ownedOrder} from "./server/account.ts";
 import {mutateBuild} from "./server/build-mutations.ts";
 import {mutateAdmin} from "./server/admin.ts";
-const app=express();app.disable("x-powered-by");app.use(helmet());app.use(cors({origin:env.APP_URL,credentials:true}));app.use(express.json({limit:"64kb"}));
+const app=express();app.disable("x-powered-by");app.use(contentSecurityPolicy(),crossOriginOpenerPolicy(),crossOriginResourcePolicy(),originAgentCluster(),referrerPolicy(),strictTransportSecurity(),xContentTypeOptions(),xDnsPrefetchControl(),xDownloadOptions(),xFrameOptions(),xPermittedCrossDomainPolicies(),xPoweredBy(),xXssProtection());app.use(cors({origin:env.APP_URL,credentials:true}));app.use(express.json({limit:"64kb"}));
 app.use((req,res,next)=>context.run({req,res},()=>next()));
 app.get("/api/health",(_req,res)=>res.json({status:"ok",service:"futera-server"}));
 app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if(!["GET","HEAD","OPTIONS"].includes(req.method)&&req.headers.origin!==new URL(env.APP_URL).origin)throw new HttpError(403,"Origin rejected");await loadSession();next();});
@@ -64,3 +64,4 @@ app.get("/v1/admin/report",async(req,res)=>{
 app.use((_req,_res,next)=>next(new HttpError(404,"Endpoint not found")));
 app.use((error:unknown,_req:Request,res:Response,_next:NextFunction)=>{void _next;if(error instanceof z.ZodError){res.status(400).json({error:"Invalid input",fields:error.issues.map(i=>i.path.join("."))});return;}const status=error instanceof HttpError?error.status:500;res.status(status).json({error:status<500&&error instanceof Error?error.message:"Request could not be completed. Check configuration or retry."});});
 export default app;
+

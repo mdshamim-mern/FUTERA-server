@@ -35,6 +35,7 @@ export function parseCatalogQuery(params: SearchParams): CatalogQuery {
 }
 export function buildProductFilter(query: CatalogQuery) {
   const filter: Record<string, unknown> = { active: true };
+  if(query.min!==undefined || query.max!==undefined || query.stock)filter.isReference={$ne:true};
   if (query.category) filter.category = query.category;
   if (query.brand) filter.brand = query.brand;
   if (query.q) filter.$text = { $search: `"${query.q}"` };
@@ -57,6 +58,7 @@ export function productSort(query: CatalogQuery): Record<string, 1 | -1> {
 }
 export function filterSampleProducts(products: Product[], query: CatalogQuery) {
   const result = products.filter((p) => p.active
+    && (!p.isReference || (query.min===undefined && query.max===undefined && !query.stock))
     && (!query.category || p.category === query.category)
     && (!query.brand || p.brand === query.brand)
     && (!query.q || `${p.name} ${p.brand} ${p.description}`.toLowerCase().includes(query.q.toLowerCase()))

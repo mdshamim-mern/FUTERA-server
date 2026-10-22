@@ -11,7 +11,7 @@ const schema=new Schema({_id:String,product:{type:String,required:true},ownerId:
 export const ReviewModel=mongoose.models.ProductReview??mongoose.model("ProductReview",schema);
 export const reviewInput=z.object({rating:z.number().int().min(1).max(5),body:z.string().trim().min(10).max(1500)});
 export async function listReviews(slug:string,page=1){
- if(env.CATALOG_SOURCE!=="mongodb")return {items:[],total:0,average:null,page:1,pages:1};await connectDatabase();
+ if(!env.MONGODB_URI)return {items:[],total:0,average:null,page:1,pages:1};await connectDatabase();
  const total=await ReviewModel.countDocuments({product:slug});const pages=Math.max(1,Math.ceil(total/10));page=Math.min(page,pages);
  const [items,summary]=await Promise.all([ReviewModel.find({product:slug}).select("rating body createdAt -_id").sort({createdAt:-1,_id:1}).skip((page-1)*10).limit(10).lean(),ReviewModel.aggregate([{$match:{product:slug}},{$group:{_id:null,average:{$avg:"$rating"}}}])]);return {items,total,average:summary[0]?.average??null,page,pages};
 }

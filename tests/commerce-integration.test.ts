@@ -5,7 +5,7 @@ import {MongoMemoryReplSet} from "mongodb-memory-server";
 import {randomUUID} from "node:crypto";
 const identity=vi.hoisted(()=>({id:""}));
 vi.mock("@/platform",()=>({context:{getStore:()=>({userId:identity.id})},cookies:async()=>({get:()=>undefined,set:vi.fn(),delete:vi.fn()})}));
-vi.mock("@/lib/env",()=>({env:{COMMERCE_ENABLED:"true",APP_URL:"http://localhost:3100",AUTH_SECRET:"TEST-ONLY-not-a-deployment-secret-123456789",SHIPPING_HOME_MINOR:10000,SHIPPING_PICKUP_MINOR:0}}));
+vi.mock("@/lib/env",()=>({env:{COMMERCE_ENABLED:"true",CHECKOUT_ENABLED:"true",APP_URL:"http://localhost:3100",AUTH_SECRET:"TEST-ONLY-not-a-deployment-secret-123456789",SHIPPING_HOME_MINOR:10000,SHIPPING_PICKUP_MINOR:0}}));
 vi.mock("@/lib/db",()=>({connectDatabase:async()=>mongoose}));
 import {UserModel,CartModel,OrderModel,BuildModel,CouponModel,commerceModels} from "@/server/models/commerce";
 import {mutateAdmin} from "@/server/admin";
@@ -110,6 +110,7 @@ it("compatibility overrides cannot claim ok or suppress unknown checks",async()=
  await mutateAdmin({operation:"compatibility",value,reason:"Record sample revision issue"});expect((await SettingModel.findById("compatibility"))?.value).toEqual(value);
  await expect(mutateAdmin({operation:"compatibility",value:{...value,overrides:[{...value.overrides[0],status:"ok"}]},reason:"Unsafe override test"})).rejects.toThrow();
 });
+
 
 
 

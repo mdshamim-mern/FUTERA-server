@@ -22,6 +22,7 @@ const productModelSchema = new Schema({
   name: { type: String, required: true }, brand: { type: String, required: true },
   category: { type: String, enum: categoryCodes, required: true },
   description: { type: String, required: true },
+  isReference: {type:Boolean}, sourceUrl: {type:String}, reviewedAt: {type:String},
   priceMinor: { type: Number, min: 0, required: true }, stock: { type: Number, min: 0, required: true },
   active: { type: Boolean, required: true }, isSample: { type: Boolean, required: true }, featured: { type: Boolean, required: true },
   images: { type: [{ _id: false, src: { type: String, required: true }, alt: { type: String, required: true } }], required: true },

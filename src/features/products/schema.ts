@@ -38,12 +38,14 @@ export const productSchema = z.strictObject({
   slug: slugSchema, sku: z.string().min(1).max(60), name: z.string().min(1).max(140),
   brand: z.string().min(1).max(60), category: z.enum(categoryCodes),
   description: z.string().min(1).max(2000),
+  isReference: z.boolean().optional(), sourceUrl: z.url().startsWith("https://").optional(), reviewedAt: z.iso.date().optional(),
   priceMinor: z.number().int().min(0).max(100_000_000),
   stock: z.number().int().min(0).max(100_000),
   active: z.boolean(), isSample: z.boolean(), featured: z.boolean(),
-  images: z.array(z.object({ src: z.string().regex(/^\/placeholders\/[a-z0-9-]+\.svg$/), alt: z.string().min(1).max(180) })).min(1).max(6),
+  images: z.array(z.object({ src: z.string().regex(/^\/(?:placeholders|illustrations)\/[a-z0-9-]+\.svg$/), alt: z.string().min(1).max(180) })).min(1).max(6),
   specs: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.null()])),
 }).superRefine((product, ctx) => {
+  if(product.isReference && (product.isSample || product.priceMinor!==0 || product.stock!==0 || !product.sourceUrl || !product.reviewedAt))ctx.addIssue({code:"custom",path:["isReference"],message:"Reference records require a source/date and cannot carry a retail price or inventory."});
   const parsed = specSchemas[product.category].safeParse(product.specs);
   if (!parsed.success) for (const issue of parsed.error.issues) {
     ctx.addIssue({ code: "custom", path: ["specs", ...issue.path], message: issue.message });

@@ -10,7 +10,7 @@ describe("catalog URL contract", () => {
   });
   it("builds allowlisted Mongo filters with minor-unit prices and no user operators", () => {
     const query = parseCatalogQuery({ category: "cpu", min: "10.25", max: "20000", stock: "available", socket: "AM5", "$where": "evil()", q: 'cpu"\\' });
-    expect(buildProductFilter(query)).toEqual({ active: true, category: "cpu", priceMinor: { $gte: 1025, $lte: 2000000 }, stock: { $gt: 0 }, "specs.socket": "AM5", $text: { $search: '"cpu"' } });
+    expect(buildProductFilter(query)).toEqual({ active: true, isReference: { $ne: true }, category: "cpu", priceMinor: { $gte: 1025, $lte: 2000000 }, stock: { $gt: 0 }, "specs.socket": "AM5", $text: { $search: '"cpu"' } });
   });
   it("filters specs, stock and price together with deterministic ordering", () => {
     const query = parseCatalogQuery({ category: "motherboard", ramType: "DDR5", stock: "available", sort: "price-desc" });
@@ -36,3 +36,4 @@ describe("catalog URL contract", () => {
     expect(formatPrice(8550000)).toBe("৳ 85,500");
   });
 });
+

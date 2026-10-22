@@ -24,7 +24,7 @@ export async function resolveBuild(input: unknown) {
   return {
     overrides:settings.overrides, lines, checks:[...checkCompatibility(parts),...additional], power:estimatePower(parts),
     totalMinor:lines.reduce((n,l)=>n+l.product.priceMinor*l.quantity,0),
-    stockIssues:lines.filter(l=>l.quantity>l.product.stock).map(l=>({id:l.product.slug,message:`${l.product.name}: requested quantity exceeds ${l.product.isSample?"SAMPLE ":""}stock (${l.product.stock}).`})),
+    stockIssues:lines.filter(l=>l.product.isReference||l.quantity>l.product.stock).map(l=>({id:l.product.slug,message:l.product.isReference?`${l.product.name}: reference only; price and availability are not supplied.`:`${l.product.name}: requested quantity exceeds ${l.product.isSample?"SAMPLE ":""}stock (${l.product.stock}).`})),
     ignored:refs.length-lines.length,
   };
 }

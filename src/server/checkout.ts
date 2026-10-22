@@ -1,3 +1,4 @@
+import {HttpError} from "./guards.ts";
 
 import mongoose from "mongoose";
 import {createHmac,randomUUID,timingSafeEqual} from "node:crypto";
@@ -21,10 +22,12 @@ async function price(owner:string,input:CheckoutInput,session?:mongoose.ClientSe
   return calculateOrder(refs,products,coupon?.toObject() as Coupon|null,input.method==="home"?shipping.homeMinor:shipping.pickupMinor);
 }
 export async function reviewCheckout(input:CheckoutInput){
+  if(env.CHECKOUT_ENABLED!=="true")throw new HttpError(503,"Retail checkout is disabled. Reference products are not for sale.");
   const owner=await ownerKey(true);const quote=await price(owner!,input);const payload=JSON.stringify({owner,input,quote,expires:Date.now()+600000,requestId:randomUUID()});
   return {quote,token:Buffer.from(payload).toString("base64url")+"."+sign(payload)};
 }
 export async function placeOrder(token:string){
+  if(env.CHECKOUT_ENABLED!=="true")throw new HttpError(503,"Retail checkout is disabled. Reference products are not for sale.");
   if(token.length>30000)throw Error("Invalid quote.");const [encoded,signature]=token.split(".");if(!encoded||!signature)throw Error("Invalid quote.");
   const payload=Buffer.from(encoded,"base64url").toString("utf8"),actual=Buffer.from(sign(payload)),expected=Buffer.from(signature);
   if(actual.length!==expected.length||!timingSafeEqual(actual,expected))throw Error("Invalid quote.");
@@ -39,7 +42,7 @@ export async function placeOrder(token:string){
     await SettingModel.updateOne({_id:"mutation-lock"},{$inc:{revision:1}},{session});
     const quote=await price(owner!,input,session);
     if(JSON.stringify(quote)!==JSON.stringify(saved.quote))throw Error("Price, stock or discount changed. Review your order again.");
-    for(const line of quote.lines){const result=await ProductModel.updateOne({slug:line.id,active:true,priceMinor:line.unitMinor,stock:{$gte:line.quantity}},{$inc:{stock:-line.quantity}},{session});if(result.modifiedCount!==1)throw Error("Stock changed. Review your cart.");}
+    for(const line of quote.lines){const result=await ProductModel.updateOne({slug:line.id,active:true,isReference:{$ne:true},priceMinor:line.unitMinor,stock:{$gte:line.quantity}},{$inc:{stock:-line.quantity}},{session});if(result.modifiedCount!==1)throw Error("Stock changed. Review your cart.");}
     if(input.coupon){const used=await CouponModel.updateOne({_id:input.coupon,$expr:{$lt:["$used","$maxUses"]}},{$inc:{used:1}},{session});if(used.modifiedCount!==1)throw Error("Coupon exhausted.");}
     orderId=randomUUID();await OrderModel.create([{_id:orderId,ownerKey:owner,requestId:saved.requestId,...quote,address:input.address,method:input.method,coupon:input.coupon,payment:"COD",paymentStatus:"unpaid",status:"Confirmed",timeline:[{status:"Confirmed",at:new Date()}]}],{session});
     await CartModel.updateOne({_id:owner},{$set:{refs:[]}},{session});

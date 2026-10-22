@@ -30,7 +30,7 @@ app.use((req,res,next)=>context.run({req,res},()=>next()));
 app.get("/api/health",(_req,res)=>res.json({status:"ok",service:"futera-server"}));
 app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if(!["GET","HEAD","OPTIONS"].includes(req.method)&&req.headers.origin!==new URL(env.APP_URL).origin)throw new HttpError(403,"Origin rejected");await loadSession();next();});
 const ok=(res:Response,data:unknown)=>res.json({data});
-app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
+app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",checkoutEnabled:env.COMMERCE_ENABLED==="true"&&env.CHECKOUT_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
 app.get("/v1/products",async(req,res)=>ok(res,await listProducts(parseCatalogQuery(req.query as Record<string,string>))));
 app.get("/v1/products/by-ids",async(req,res)=>ok(res,await getProducts(z.string().max(3000).parse(req.query.ids??"").split(",").filter(Boolean).slice(0,100))));
 app.get("/v1/products/:slug/reviews",async(req,res)=>ok(res,await listReviews(slugSchema.parse(req.params.slug),z.coerce.number().int().min(1).max(10000).parse(req.query.page??1))));

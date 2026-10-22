@@ -1,3 +1,6 @@
+import {listReviews,writeReview} from "./server/reviews.ts";
+import {advice,aiEnabled} from "./server/ai.ts";
+import {beginGoogle,completeGoogle,googleEnabled} from "./server/google.ts";
 import express,{type Request,type Response,type NextFunction} from "express";
 import cors from "cors";
 import {contentSecurityPolicy,crossOriginOpenerPolicy,crossOriginResourcePolicy,originAgentCluster,referrerPolicy,strictTransportSecurity,xContentTypeOptions,xDnsPrefetchControl,xDownloadOptions,xFrameOptions,xPermittedCrossDomainPolicies,xPoweredBy,xXssProtection} from "helmet";
@@ -27,9 +30,11 @@ app.use((req,res,next)=>context.run({req,res},()=>next()));
 app.get("/api/health",(_req,res)=>res.json({status:"ok",service:"futera-server"}));
 app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if(!["GET","HEAD","OPTIONS"].includes(req.method)&&req.headers.origin!==new URL(env.APP_URL).origin)throw new HttpError(403,"Origin rejected");await loadSession();next();});
 const ok=(res:Response,data:unknown)=>res.json({data});
-app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",googleEnabled:false,aiEnabled:false}));
+app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
 app.get("/v1/products",async(req,res)=>ok(res,await listProducts(parseCatalogQuery(req.query as Record<string,string>))));
 app.get("/v1/products/by-ids",async(req,res)=>ok(res,await getProducts(z.string().max(3000).parse(req.query.ids??"").split(",").filter(Boolean).slice(0,100))));
+app.get("/v1/products/:slug/reviews",async(req,res)=>ok(res,await listReviews(slugSchema.parse(req.params.slug),z.coerce.number().int().min(1).max(10000).parse(req.query.page??1))));
+app.post("/v1/products/:slug/reviews",async(req,res)=>ok(res,await writeReview(slugSchema.parse(req.params.slug),req.body)));
 app.get("/v1/products/:slug",async(req,res)=>{const p=await getProduct(slugSchema.parse(req.params.slug));if(!p)throw new HttpError(404,"Product not found");ok(res,p);});
 app.get("/v1/categories",async(_req,res)=>ok(res,await getCategories()));app.get("/v1/brands",async(_req,res)=>ok(res,await getBrands()));
 app.get("/v1/builder/catalog",async(_req,res)=>ok(res,await getBuilderCatalog()));app.post("/v1/builder/quote",async(req,res)=>ok(res,await resolveBuild(req.body)));
@@ -49,6 +54,9 @@ app.post("/v1/wishlist",async(req,res)=>{const user=await requireUser();const id
 app.post("/v1/builds",async(req,res)=>{const user=await requireUser();const quote=await resolveBuild(req.body);if(!quote.lines.length)throw new HttpError(400,"Select components first");const build=await BuildModel.create({_id:randomUUID(),ownerId:user._id,name:"My FUTERA build",refs:quote.lines.map(l=>({id:l.product.slug,quantity:l.quantity}))});ok(res,build._id);});
 app.patch("/v1/builds/:id",async(req,res)=>{await requireUser();const form=new FormData();form.set("id",z.uuid().parse(req.params.id));for(const key of ["operation","name"])if(typeof req.body[key]==="string")form.set(key,req.body[key]);await mutateBuild(form);ok(res,true);});
 app.get("/v1/shared-builds/:token",async(req,res)=>{const token=z.string().regex(/^[a-f0-9]{48}$/).parse(req.params.token);const build=await BuildModel.findOne({shareToken:token});if(!build)throw new HttpError(404,"Build not found");ok(res,{name:build.name,quote:await resolveBuild(build.refs.map(r=>({id:r.id,quantity:r.quantity})))});});
+app.post("/v1/ai/advice",async(req,res)=>ok(res,await advice(req.body)));
+app.post("/v1/auth/google/start",async(_req,res)=>ok(res,await beginGoogle()));
+app.post("/v1/auth/google/complete",async(req,res)=>ok(res,await completeGoogle(req.body)));
 app.use("/v1/admin",async(_req,_res,next)=>{await requireAdmin();next();});
 app.post("/v1/admin/mutations",async(req,res)=>{await mutateAdmin(req.body);ok(res,true);});
 app.get("/v1/admin/report",async(req,res)=>{
@@ -64,4 +72,7 @@ app.get("/v1/admin/report",async(req,res)=>{
 app.use((_req,_res,next)=>next(new HttpError(404,"Endpoint not found")));
 app.use((error:unknown,_req:Request,res:Response,_next:NextFunction)=>{void _next;if(error instanceof z.ZodError){res.status(400).json({error:"Invalid input",fields:error.issues.map(i=>i.path.join("."))});return;}const status=error instanceof HttpError?error.status:500;res.status(status).json({error:status<500&&error instanceof Error?error.message:"Request could not be completed. Check configuration or retry."});});
 export default app;
+
+
+
 

@@ -1,0 +1,16 @@
+import {it,expect,vi,beforeEach,afterEach} from "vitest";
+vi.mock("../src/lib/env.ts",()=>({env:{COMMERCE_ENABLED:"true",GEMINI_API_KEY:"test-only",GEMINI_MODEL:"test-model"}}));
+vi.mock("../src/server/guards.ts",()=>({requireUser:vi.fn(async()=>({_id:"test-user"})),HttpError:class extends Error{constructor(public status:number,message:string){super(message);}}}));
+vi.mock("../src/server/auth-rate.ts",()=>({limitAuth:vi.fn()}));
+vi.mock("../src/server/catalog.ts",()=>({listProducts:vi.fn(async()=>({products:[{slug:"sample-cpu-01",name:"SAMPLE CPU",isSample:true,category:"cpu",specs:{socket:"AM5"}}]})),getProducts:vi.fn(async(ids:string[])=>ids.map(slug=>({slug,name:"SAMPLE CPU",isSample:true})))}));
+import {aiInput,generateAdvice,advice} from "../src/server/ai.ts";
+import {requireUser} from "../src/server/guards.ts";
+const fetchMock=vi.fn();
+beforeEach(()=>{vi.stubGlobal("fetch",fetchMock);fetchMock.mockReset();});afterEach(()=>vi.unstubAllGlobals());
+const response=(data:unknown)=>new Response(JSON.stringify({candidates:[{content:{parts:[{text:JSON.stringify(data)}]}}]}));
+it("validates feature and bounded input",()=>{expect(aiInput.safeParse({mode:"execute",question:"test question"}).success).toBe(false);expect(aiInput.safeParse({mode:"support",question:"a".repeat(1201)}).success).toBe(false);});
+it("does not fake provider success",async()=>{fetchMock.mockResolvedValue(new Response("unavailable",{status:503}));await expect(generateAdvice("question")).rejects.toThrow("unavailable");});
+it("rejects malformed model output",async()=>{fetchMock.mockResolvedValue(response({answer:"",productIds:[]}));await expect(generateAdvice("question")).rejects.toThrow("unusable");});
+it("only returns fresh products selected from supplied catalog IDs",async()=>{fetchMock.mockResolvedValue(response({answer:"Review the socket.",productIds:["invented-product","sample-cpu-01","sample-cpu-01"]}));const result=await advice({mode:"recommend",question:"An office CPU",category:"cpu"});expect(result.products.map(p=>p.slug)).toEqual(["sample-cpu-01"]);const body=JSON.parse(fetchMock.mock.calls[0][1].body);expect(JSON.stringify(body)).not.toContain("test-user");expect(fetchMock.mock.calls[0][0]).toContain("generativelanguage.googleapis.com");});
+it("support cannot recommend unsupported product IDs",async()=>{fetchMock.mockResolvedValue(response({answer:"Use PC Builder.",productIds:["sample-cpu-01"]}));expect((await advice({mode:"support",question:"How do I check RAM?"})).products).toEqual([]);});
+it("requires an authenticated account before sending data",async()=>{vi.mocked(requireUser).mockRejectedValueOnce(Error("Please log in"));await expect(advice({mode:"support",question:"How do I check RAM?"})).rejects.toThrow("log in");expect(fetchMock).not.toHaveBeenCalled();});

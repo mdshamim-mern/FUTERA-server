@@ -18,8 +18,12 @@ export async function login(raw:unknown,register=false){
  commerceEnabled();await limitAuth("api-login-global",300);const input=credentials.parse(raw);await limitAuth(`api-login:${input.email}`,8);
  if(register){const name=z.object({name:z.string().trim().min(2).max(80)}).parse(raw).name;await UserModel.create({_id:randomUUID(),name,email:input.email,passwordHash:await hashPassword(input.password),role:"customer"});}
  const user=await UserModel.findOne({email:input.email}).select("+passwordHash");const valid=await verifyPassword(input.password,user?.passwordHash??`scrypt-v1:${"0".repeat(32)}:${"0".repeat(128)}`);if(!user||user.disabled||!valid)throw new HttpError(401,"Unable to log in. Check your credentials.");
+ return issueSession(user);
+}
+export async function issueSession(user:{_id:string;name:string;email:string;role:string;sessionVersion:number}){
  await mergeGuestCart(user._id);const token=randomBytes(32).toString("hex");await SessionModel.create({_id:hash(token),userId:user._id,version:user.sessionVersion,expiresAt:new Date(Date.now()+86400000)});
  (await cookies()).set("futera-session",token,{httpOnly:true,sameSite:"lax",secure:env.APP_URL.startsWith("https:"),path:"/",maxAge:86400});context.getStore()!.userId=user._id;
  return {id:user._id,name:user.name,email:user.email,role:user.role};
 }
 export async function logout(){const id=context.getStore()?.userId;if(id)await UserModel.updateOne({_id:id},{$inc:{sessionVersion:1}});const token=(await cookies()).get("futera-session")?.value;if(token)await SessionModel.deleteOne({_id:hash(token)});(await cookies()).delete("futera-session");}
+

@@ -12,3 +12,5 @@
 - [ ] Live demo order checkout and frontend role-aware regression suite.
 
 Frontend docs/ASSETS.md lists missing exact-model photos. A new credential must be entered and submitted by the owner under browser handoff policy. Existing reference order rejection and disabled checkout remain unchanged until a verified migration.
+
+Checkout configuration fix: the runtime env adapter now forwards CHECKOUT_ENABLED into Zod validation. Regression tests import the runtime module with both true and false; both values are honored. Final backend lint/typecheck/test/build pass: 167 tests / 13 files. Live provider/database activation remains pending.

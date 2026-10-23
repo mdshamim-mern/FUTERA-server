@@ -1,0 +1,2 @@
+# Asset contract
+The frontend repository owns public images and docs/ASSETS.md. Every demo catalog image must correspond to the correct model and have a source, creator and license/permission. Three repeated crops do not count as three distinct product photographs. Unsplash editorial images cannot establish exact-model identity. Backend asset schema migration is pending; do not write unsupported paths into production records.

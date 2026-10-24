@@ -1,6 +1,7 @@
 import {existsSync} from "node:fs";
 import {loadEnvFile} from "node:process";
-for(const file of [".env.local",".env"])if(existsSync(file))loadEnvFile(file);
+// Tests must never load real provider credentials from local files.
+if(process.env.NODE_ENV!=="test")for(const file of [".env.local",".env"])if(existsSync(file))loadEnvFile(file);
 
 import { parseEnv } from "./env-schema.ts";
 

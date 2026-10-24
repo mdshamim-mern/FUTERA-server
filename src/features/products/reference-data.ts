@@ -1,3 +1,4 @@
+import {catalogEnrichment} from "./catalog-enrichment.ts";
 import {productSchema,categoryCodes,categoryLabels} from "./schema.ts";
 const records = [
   {
@@ -606,5 +607,5 @@ const records = [
     ]
   }
 ];
-export const referenceProducts=records.map(p=>productSchema.parse(p));
+export const referenceProducts=records.map(p=>productSchema.parse({...p,...catalogEnrichment[p.slug]}));
 export const referenceCategories=categoryCodes.filter(c=>referenceProducts.some(p=>p.category===c)).map((slug,sortOrder)=>({slug,name:categoryLabels[slug],description:`Manufacturer-sourced ${categoryLabels[slug]} references; no retail offer.`,sortOrder,active:true,isSample:false}));

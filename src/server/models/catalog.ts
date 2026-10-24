@@ -23,9 +23,10 @@ const productModelSchema = new Schema({
   category: { type: String, enum: categoryCodes, required: true },
   description: { type: String, required: true },
   isReference: {type:Boolean}, sourceUrl: {type:String}, reviewedAt: {type:String},
+  marketPrice: {type: new Schema({amountMinor:Number,sourceUrl:String,checkedAt:String,note:String},{_id:false})},
   priceMinor: { type: Number, min: 0, required: true }, stock: { type: Number, min: 0, required: true },
   active: { type: Boolean, required: true }, isSample: { type: Boolean, required: true }, featured: { type: Boolean, required: true },
-  images: { type: [{ _id: false, src: { type: String, required: true }, alt: { type: String, required: true } }], required: true },
+  images: { type: [{ _id: false, src: { type: String, required: true }, alt: { type: String, required: true }, credit:String,sourceUrl:String,licenseUrl:String }], required: true },
   // Mixed storage is constrained by category-specific strict Zod specs on validation.
   // Catalog writes must use document.save(), not unvalidated update operators.
   specs: { type: Schema.Types.Mixed, required: true },

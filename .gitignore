@@ -5,3 +5,4 @@ coverage/
 !.env.example
 .vercel/
 *.log
+/.artifacts/

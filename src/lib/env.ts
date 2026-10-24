@@ -7,6 +7,7 @@ import { parseEnv } from "./env-schema.ts";
 
 export const env = parseEnv({
   GOOGLE_CLIENT_ID:process.env.GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET:process.env.GOOGLE_CLIENT_SECRET,GEMINI_API_KEY:process.env.GEMINI_API_KEY,GEMINI_MODEL:process.env.GEMINI_MODEL,
+  DEMO_LOGIN_ENABLED:process.env.DEMO_LOGIN_ENABLED,
   NODE_ENV: process.env.NODE_ENV,
   APP_URL: process.env.APP_URL,
   CATALOG_SOURCE: process.env.CATALOG_SOURCE,

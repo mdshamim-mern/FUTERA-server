@@ -69,3 +69,6 @@ catalogEnrichment["crucial-p3-plus-2000gb"] = {
   ]
 };
 catalogEnrichment["crucial-p3-plus-2000gb"].marketPrice = {amountMinor:1550000,sourceUrl:"https://www.binarylogic.com.bd/crucial-p3-plus-2tb-pcie-gen-4-x4-m2-2280-ssd-ct2000p3pssd8",checkedAt:"2026-10-24",note:"Published cash price; source listing is out of stock. This is a price observation, not a stock or purchase promise."};
+catalogEnrichment["amd-ryzen-9-7900x"]={marketPrice:{amountMinor:3600000,sourceUrl:"https://www.startech.com.bd/amd-ryzen-9-7900x-processor",checkedAt:"2026-10-24",note:"Published processor price observed on the linked listing; prices can change and do not establish FUTERA inventory."}};
+catalogEnrichment["crucial-p3-plus-1000gb"]={marketPrice:{amountMinor:690000,sourceUrl:"https://www.startech.com.bd/crucial-p3-plus-1tb-nvme-ssd",checkedAt:"2026-10-24",note:"Published price observed on the linked 1TB listing; no retailer stock or fulfillment promise is made."}};
+catalogEnrichment["amd-ryzen-7-7700x"].images=[{...catalogEnrichment["amd-ryzen-9-7950x"].images![1],alt:"AMD Ryzen 7 7700X on the left beside Ryzen 9 7950X on the right"}];

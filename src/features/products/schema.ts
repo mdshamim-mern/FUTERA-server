@@ -38,7 +38,7 @@ export const productSchema = z.strictObject({
   slug: slugSchema, sku: z.string().min(1).max(60), name: z.string().min(1).max(140),
   brand: z.string().min(1).max(60), category: z.enum(categoryCodes),
   description: z.string().min(1).max(2000),
-  isReference: z.boolean().optional(), sourceUrl: z.url().startsWith("https://").optional(), reviewedAt: z.iso.date().optional(),
+  isDemo: z.boolean().optional(), isReference: z.boolean().optional(), sourceUrl: z.url().startsWith("https://").optional(), reviewedAt: z.iso.date().optional(),
   marketPrice: z.object({amountMinor:z.number().int().positive().max(100_000_000),sourceUrl:z.url().startsWith("https://"),checkedAt:z.iso.date(),note:z.string().min(1).max(250)}).optional(),
   priceMinor: z.number().int().min(0).max(100_000_000),
   stock: z.number().int().min(0).max(100_000),
@@ -47,6 +47,7 @@ export const productSchema = z.strictObject({
   specs: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.null()])),
 }).superRefine((product, ctx) => {
   if(product.isReference && (product.isSample || product.priceMinor!==0 || product.stock!==0 || !product.sourceUrl || !product.reviewedAt))ctx.addIssue({code:"custom",path:["isReference"],message:"Reference records require a source/date and cannot carry a retail price or inventory."});
+  if(product.isDemo && (product.isReference || product.isSample || !product.marketPrice || product.priceMinor<=0 || product.images.length<3 || product.images.some(image=>!image.licenseUrl || !image.sourceUrl || !image.credit)))ctx.addIssue({code:"custom",path:["isDemo"],message:"Demo inventory requires a sourced price and three credited licensed images."});
   const parsed = specSchemas[product.category].safeParse(product.specs);
   if (!parsed.success) for (const issue of parsed.error.issues) {
     ctx.addIssue({ code: "custom", path: ["specs", ...issue.path], message: issue.message });

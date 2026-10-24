@@ -19,3 +19,9 @@ isReference requires isSample=false, source/date metadata, and zero price/stock 
 CHECKOUT_ENABLED=false blocks both review and confirmation before database work. COMMERCE_ENABLED=true can enable accounts, saved builds and provider integrations against a configured database without fabricated shipping terms when checkout is disabled. Keep checkout disabled until actual inventory and fulfillment terms are approved. Opaque revocable sessions remain authoritative; AUTH_SECRET signs checkout payloads and is not a client JWT setting.
 
 Verification for this change: lint, typecheck, 165 tests across 12 files, and build pass locally. Production credential activation and live OAuth/Gemini checks remain separate requirements.
+
+## Isolated demo inventory
+Demo store — prices, stock and orders are illustrative. No payment is collected and no real fulfillment is promised.
+Use only MONGODB_DB=futera_demo. Run npm run demo:activate to activate the fully sourced Ryzen 9 7950X; reruns preserve stock and owner changes. Run npx tsx scripts/demo-account.ts for the shared customer account, and npx tsx scripts/sync-enrichment.ts to update reference photography/price metadata. DEMO_LOGIN_ENABLED=true exposes customer-only auto-fill credentials only in futera_demo. Unrestricted admin credentials are never published.
+Checkout requires CATALOG_SOURCE=mongodb, CHECKOUT_ENABLED=true and explicit SHIPPING_HOME_MINOR, SHIPPING_PICKUP_MINOR, PICKUP_ADDRESS. Demo virtual pickup is not a physical location.
+Gemini Flash-Lite 3.5 returned validated real recommendations/support in approximately 2–6 seconds locally; deployment model configuration and live verification must be checked separately.

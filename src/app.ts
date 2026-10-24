@@ -30,6 +30,8 @@ app.use((req,res,next)=>context.run({req,res},()=>next()));
 app.get("/api/health",(_req,res)=>res.json({status:"ok",service:"futera-server"}));
 app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if(!["GET","HEAD","OPTIONS"].includes(req.method)&&req.headers.origin!==new URL(env.APP_URL).origin)throw new HttpError(403,"Origin rejected");await loadSession();next();});
 const ok=(res:Response,data:unknown)=>res.json({data});
+app.get("/v1/demo/account",async(_req,res)=>{if(env.DEMO_LOGIN_ENABLED!=="true"||env.MONGODB_DB!=="futera_demo")throw new HttpError(404,"Not available");await requireDemoAccount();ok(res,{email:"customer@futera.example.test",password:"Futera-Demo-Customer-2026!"});});
+async function requireDemoAccount(){const {connectDatabase}=await import("./lib/db.ts");await connectDatabase();if(!await UserModel.exists({email:"customer@futera.example.test",role:"customer",isDemo:true,disabled:false}))throw new HttpError(503,"Demo account not activated.");}
 app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",checkoutEnabled:env.COMMERCE_ENABLED==="true"&&env.CHECKOUT_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
 app.get("/v1/products",async(req,res)=>ok(res,await listProducts(parseCatalogQuery(req.query as Record<string,string>))));
 app.get("/v1/products/by-ids",async(req,res)=>ok(res,await getProducts(z.string().max(3000).parse(req.query.ids??"").split(",").filter(Boolean).slice(0,100))));

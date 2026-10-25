@@ -25,3 +25,13 @@ Demo store — prices, stock and orders are illustrative. No payment is collecte
 Use only MONGODB_DB=futera_demo. Run npm run demo:activate to activate the fully sourced Ryzen 9 7950X; reruns preserve stock and owner changes. Run npx tsx scripts/demo-account.ts for the shared customer account, and npx tsx scripts/sync-enrichment.ts to update reference photography/price metadata. DEMO_LOGIN_ENABLED=true exposes customer-only auto-fill credentials only in futera_demo. Unrestricted admin credentials are never published.
 Checkout requires CATALOG_SOURCE=mongodb, CHECKOUT_ENABLED=true and explicit SHIPPING_HOME_MINOR, SHIPPING_PICKUP_MINOR, PICKUP_ADDRESS. Demo virtual pickup is not a physical location.
 Gemini Flash-Lite 3.5 returned validated real recommendations/support in approximately 2–6 seconds locally; deployment model configuration and live verification must be checked separately.
+
+## Active demo deployment — 25 October 2026
+
+Production API: https://futera-server.vercel.app. The isolated futera_demo Atlas database serves 20 photographed, priced demo products. Run `npm run demo:catalog` only with a non-production NODE_ENV and the isolated demo database; it preserves existing demo records/stock and rejects conflicting owner records before changes. `npm run demo:accounts` idempotently creates the public demo customer and read-only administrator.
+
+Demo admin sessions expose demoReadOnly. Every administrative mutation is rejected server-side for isDemo administrators; their order/user/audit reports exclude private owner/customer records. Owner administrators retain authenticated, fresh-role-checked, transactional mutations and audit history. Report pagination is bounded to 20 records and filtered counts determine the last page.
+
+Eight demo prices are based on retailer observations, twelve are labelled illustrative; all stock is illustrative. Demo COD creates an unpaid order, collects no payment and promises no physical delivery. Both deployed Gemini modes were verified with real answers on 25 October. Credentials and service keys remain in ignored environment files/Vercel configuration.
+
+Acceptance checks on 25 October: lint/typecheck/build pass; 174 tests in 14 files pass, including every demo admin mutation denial, other-owner isolation and account pagination.

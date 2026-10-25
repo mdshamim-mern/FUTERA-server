@@ -1,0 +1,9 @@
+import mongoose from "mongoose";
+import {writeFile} from "node:fs/promises";
+import {env} from "../src/lib/env.ts";
+import {connectDatabase} from "../src/lib/db.ts";
+import {currentProducts} from "../src/features/products/current-data.ts";
+import {ProductModel} from "../src/server/models/catalog.ts";
+if(env.MONGODB_DB!=="futera_demo"||env.NODE_ENV==="production")throw Error("Isolated demo maintenance only");
+const origin=new URL(process.argv[2]??env.APP_URL);if(origin.protocol!=="https:")throw Error("HTTPS media origin required");
+try{const images=currentProducts.flatMap(p=>p.images);for(let i=0;i<images.length;i+=4)await Promise.all(images.slice(i,i+4).map(async image=>{const response=await fetch(new URL(image.src,origin),{method:"HEAD",signal:AbortSignal.timeout(20000)});if(!response.ok)throw Error("Media unavailable");}));await connectDatabase();const before=await ProductModel.find({slug:{$in:currentProducts.map(p=>p.slug)},isDemo:true,active:true}).select("slug images").lean();if(before.length!==currentProducts.length)throw Error("Catalog changed; review before updating");await writeFile(`.artifacts/galleries-before-${Date.now()}.json`,JSON.stringify(before,null,2));await mongoose.connection.transaction(async session=>{for(const product of currentProducts){const result=await ProductModel.updateOne({slug:product.slug,isDemo:true,active:true},{$set:{images:product.images}},{session,runValidators:true});if(result.matchedCount!==1)throw Error("Catalog changed");}});console.log(JSON.stringify({updatedModels:currentProducts.length,verifiedMedia:images.length,minimumViews:Math.min(...currentProducts.map(p=>p.images.length)),stockAndPricesUnchanged:true}));}catch{console.error("Gallery maintenance failed; credentials hidden. No partial gallery transaction was applied.");process.exitCode=1;}finally{await mongoose.disconnect();}

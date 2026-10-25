@@ -54,5 +54,59 @@
       "credit": "Noctua product media; cropped from information sheet",
       "sourceUrl": "https://cdn.noctua.at/media/noctua_nh_d15s_infosheet_cn.pdf?download=true"
     }
+  ],
+  "amd-ryzen-5-7600x": [
+    {
+      "src": "/images/products/amd-ryzen-5-7600x/manufacturer-box.webp",
+      "alt": "AMD Ryzen 5 7600X — manufacturer retail package view",
+      "credit": "AMD product media",
+      "sourceUrl": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600x.html"
+    }
+  ],
+  "amd-ryzen-7-7700x": [
+    {
+      "src": "/images/products/amd-ryzen-7-7700x/manufacturer-box.webp",
+      "alt": "AMD Ryzen 7 7700X — manufacturer retail package view",
+      "credit": "AMD product media",
+      "sourceUrl": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-7-7700x.html"
+    }
+  ],
+  "fantech-go-k211-bangla": [
+    {
+      "src": "/images/products/fantech-go-k211-bangla/family-angle.webp",
+      "alt": "Fantech GO K211 family side angle; pictured key legends may differ from the Bangla edition",
+      "credit": "Fantech family media via Rokomari",
+      "sourceUrl": "https://www.rokomari.com/electronics/363630/fantech-go-k211-bangla-keyboard"
+    },
+    {
+      "src": "/images/products/fantech-go-k211-bangla/family-packaging.webp",
+      "alt": "Fantech GO K211 family packaging and box contents; key legends depend on regional edition",
+      "credit": "Fantech family media via Rokomari",
+      "sourceUrl": "https://www.rokomari.com/electronics/363630/fantech-go-k211-bangla-keyboard"
+    }
+  ],
+  "crucial-p3-plus-1000gb": [
+    {
+      "src": "/images/products/crucial-p3-plus-1000gb/installation-media.webp",
+      "alt": "Crucial P3 Plus family installation-support media, not a second hardware angle",
+      "credit": "Crucial family support media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/crucial-p3-plus-1tb-nvme-ssd"
+    }
+  ],
+  "amd-ryzen-9-7900x": [
+    {
+      "src": "/images/products/amd-ryzen-9-7900x/specification-overview.webp",
+      "alt": "AMD Ryzen 9 7900X — original specification diagram, not a photograph",
+      "credit": "Original FUTERA diagram; facts from linked product documentation",
+      "sourceUrl": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-9-7900x.html"
+    }
+  ],
+  "power-guard-pg-650va-cs": [
+    {
+      "src": "/images/products/power-guard-pg-650va-cs/specification-overview.webp",
+      "alt": "Power Guard PG 650VA CS — original specification diagram, not a photograph",
+      "credit": "Original FUTERA diagram; facts from linked product documentation",
+      "sourceUrl": "https://www.startech.com.bd/power-guard-pg-650va-cs-offline-ups"
+    }
   ]
 }

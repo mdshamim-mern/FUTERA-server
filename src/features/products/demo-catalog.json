@@ -1,0 +1,210 @@
+[
+  {
+    "slug": "amd-ryzen-5-7600x",
+    "priceMinor": 1700000,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/amd-ryzen-5-7600x/product.webp",
+      "alt": "amd ryzen 5 7600x product photograph",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/amd-ryzen-5-7600x-processor"
+    }
+  },
+  {
+    "slug": "amd-ryzen-7-7700x",
+    "priceMinor": 2300000,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/amd-ryzen-7-7700x/product.webp",
+      "alt": "amd ryzen 7 7700x product photograph",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/amd-ryzen-7-7700x-processor"
+    }
+  },
+  {
+    "slug": "amd-ryzen-9-7900x",
+    "priceMinor": 3600000,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/amd-ryzen-9-7900x/product.webp",
+      "alt": "AMD Ryzen 9 7900X processor and retail packaging",
+      "credit": "AMD product media",
+      "sourceUrl": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-9-7900x.html"
+    }
+  },
+  {
+    "slug": "amd-ryzen-9-7950x",
+    "priceMinor": 4690000,
+    "kind": "observed"
+  },
+  {
+    "slug": "crucial-p3-plus-500gb",
+    "priceMinor": 450000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/crucial-p3-plus-500gb/product.webp",
+      "alt": "Crucial P3 Plus family photograph; capacity is specified in the product details",
+      "credit": "Crucial family media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/crucial-p3-plus-1tb-nvme-ssd"
+    }
+  },
+  {
+    "slug": "crucial-p3-plus-1000gb",
+    "priceMinor": 690000,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/crucial-p3-plus-1000gb/product.webp",
+      "alt": "Crucial P3 Plus family photograph; capacity is specified in the product details",
+      "credit": "Crucial family media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/crucial-p3-plus-1tb-nvme-ssd"
+    }
+  },
+  {
+    "slug": "crucial-p3-plus-2000gb",
+    "priceMinor": 1550000,
+    "kind": "observed"
+  },
+  {
+    "slug": "crucial-p3-plus-4000gb",
+    "priceMinor": 2800000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/crucial-p3-plus-4000gb/product.webp",
+      "alt": "Crucial P3 Plus family photograph; capacity is specified in the product details",
+      "credit": "Crucial family media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/crucial-p3-plus-1tb-nvme-ssd"
+    }
+  },
+  {
+    "slug": "corsair-rm650-2021",
+    "priceMinor": 1150000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/corsair-rm650-2021/product.webp",
+      "alt": "Corsair RM650 2021 black edition power supply",
+      "credit": "Corsair product media",
+      "sourceUrl": "https://www.corsair.com/us/en/p/psu/cp-9020233-na/rm-series-rm650-650-watt-80-plus-gold-fully-modular-atx-psu-cp-9020233-na"
+    }
+  },
+  {
+    "slug": "corsair-rm750-2021",
+    "priceMinor": 1350000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/corsair-rm750-2021/product.webp",
+      "alt": "Corsair RM750 2021 white edition power supply",
+      "credit": "Corsair product media",
+      "sourceUrl": "https://www.corsair.com/us/en/p/psu/cp-9020231-na/rm-series-rm750-750-watt-80-plus-gold-fully-modular-atx-psu-cp-9020231-na"
+    }
+  },
+  {
+    "slug": "corsair-rm850-2021",
+    "priceMinor": 1550000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/corsair-rm850-2021/product.webp",
+      "alt": "Corsair RM850 2021 black edition power supply",
+      "credit": "Corsair product media",
+      "sourceUrl": "https://www.corsair.com/us/en/p/psu/cp-9020235-na/rm-series-rm850-850-watt-80-plus-gold-fully-modular-atx-psu-cp-9020235-na"
+    }
+  },
+  {
+    "slug": "kf552c40bbk2-32",
+    "priceMinor": 1300000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/kf552c40bbk2-32/product.webp",
+      "alt": "Kingston FURY Beast DDR5 32GB kit, KF552C40BBK2-32",
+      "credit": "Kingston product media via Airdrie Computer",
+      "sourceUrl": "https://www.airdriecomputer.com/collections/desktop-memory-ram/products/kingston-fury-beast-32gb-2x16gb-ddr5-5200mt-s-desktop-memory-kf552c40bbk2-32"
+    }
+  },
+  {
+    "slug": "kf556c40bbk2-32",
+    "priceMinor": 1400000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/kf556c40bbk2-32/product.webp",
+      "alt": "Kingston FURY Beast DDR5 5600 32GB kit, KF556C40BBK2-32",
+      "credit": "Kingston product media via JIB",
+      "sourceUrl": "https://www.jib.co.th/web/product/readProduct/51146"
+    }
+  },
+  {
+    "slug": "kvr48u40bd8-32",
+    "priceMinor": 1100000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/kvr48u40bd8-32/product.webp",
+      "alt": "Kingston ValueRAM KVR48U40BD8-32 memory module",
+      "credit": "Kingston product media via Saitech",
+      "sourceUrl": "https://esaitech.com/products/kingston-kvr48u40bd8-32-32gb-value-ddr5-memory-module"
+    }
+  },
+  {
+    "slug": "msi-b650-gaming-plus-wifi",
+    "priceMinor": 2250000,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/msi-b650-gaming-plus-wifi/product.webp",
+      "alt": "msi b650 gaming plus wifi product photograph",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650-gaming-plus-wifi-motherboard"
+    }
+  },
+  {
+    "slug": "msi-b650m-gaming-plus-wifi",
+    "priceMinor": 2099900,
+    "kind": "observed",
+    "image": {
+      "src": "/images/products/msi-b650m-gaming-plus-wifi/product.webp",
+      "alt": "msi b650m gaming plus wifi product photograph",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650m-gaming-plus-wifi-motherboard"
+    }
+  },
+  {
+    "slug": "noctua-nh-u12s",
+    "priceMinor": 850000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/noctua-nh-u12s/product.webp",
+      "alt": "Noctua NH-U12S cooler from its manufacturer information sheet",
+      "credit": "Noctua product media; cropped from information sheet",
+      "sourceUrl": "https://cdn.noctua.at/media/noctua_nh_u12s_infosheet_en_web.pdf"
+    }
+  },
+  {
+    "slug": "noctua-nh-d15s",
+    "priceMinor": 1250000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/noctua-nh-d15s/product.webp",
+      "alt": "Noctua NH-D15S cooler from its manufacturer information sheet",
+      "credit": "Noctua product media; cropped from information sheet",
+      "sourceUrl": "https://cdn.noctua.at/media/noctua_nh_d15s_infosheet_cn.pdf?download=true"
+    }
+  },
+  {
+    "slug": "fractal-pop-air",
+    "priceMinor": 1100000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/fractal-pop-air/product.webp",
+      "alt": "Fractal Pop Air RGB Black TG Clear Tint edition",
+      "credit": "Fractal Design product media",
+      "sourceUrl": "https://www.fractal-design.com/products/cases/pop/pop-air/black-tg-clear/"
+    }
+  },
+  {
+    "slug": "fractal-pop-silent",
+    "priceMinor": 1050000,
+    "kind": "illustrative",
+    "image": {
+      "src": "/images/products/fractal-pop-silent/product.webp",
+      "alt": "Fractal Pop Silent Black Solid edition",
+      "credit": "Fractal Design product media",
+      "sourceUrl": "https://www.fractal-design.com/products/cases/pop/pop-silent/black-solid/"
+    }
+  }
+]

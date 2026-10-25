@@ -18,10 +18,10 @@ import {parseReferences} from "./features/builder/schema.ts";
 import {readCart,writeCart,mergeReferences} from "./server/cart.ts";
 import {reviewCheckout,placeOrder} from "./server/checkout.ts";
 import {checkoutSchema,addressSchema} from "./features/checkout/schema.ts";
-import {shippingSettings,compatibilitySettings} from "./server/settings.ts";
-import {BuildModel,OrderModel,CouponModel,UserModel,orderStatuses} from "./server/models/commerce.ts";
-import {ProductModel} from "./server/models/catalog.ts";
-import {AuditModel} from "./server/models/admin.ts";
+import {shippingSettings} from "./server/settings.ts";
+import {BuildModel,UserModel} from "./server/models/commerce.ts";
+
+
 import {ownedOrder} from "./server/account.ts";
 import {mutateBuild} from "./server/build-mutations.ts";
 import {mutateAdmin} from "./server/admin.ts";
@@ -30,7 +30,7 @@ app.use((req,res,next)=>context.run({req,res},()=>next()));
 app.get("/api/health",(_req,res)=>res.json({status:"ok",service:"futera-server"}));
 app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if(!["GET","HEAD","OPTIONS"].includes(req.method)&&req.headers.origin!==new URL(env.APP_URL).origin)throw new HttpError(403,"Origin rejected");await loadSession();next();});
 const ok=(res:Response,data:unknown)=>res.json({data});
-app.get("/v1/demo/account",async(_req,res)=>{if(env.DEMO_LOGIN_ENABLED!=="true"||env.MONGODB_DB!=="futera_demo")throw new HttpError(404,"Not available");await requireDemoAccount();ok(res,{email:"customer@futera.example.test",password:"Futera-Demo-Customer-2026!"});});
+app.get("/v1/demo/account",async(_req,res)=>{if(env.DEMO_LOGIN_ENABLED!=="true"||env.MONGODB_DB!=="futera_demo")throw new HttpError(404,"Not available");await requireDemoAccount();ok(res,{email:"customer@futera.example.test",password:"Futera-Demo-Customer-2026!",admin:await UserModel.exists({email:"admin@futera.example.test",role:"admin",isDemo:true,disabled:false})?{email:"admin@futera.example.test",password:"Futera-Demo-ReadOnly-2026!"}:null});});
 async function requireDemoAccount(){const {connectDatabase}=await import("./lib/db.ts");await connectDatabase();if(!await UserModel.exists({email:"customer@futera.example.test",role:"customer",isDemo:true,disabled:false}))throw new HttpError(503,"Demo account not activated.");}
 app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",checkoutEnabled:env.COMMERCE_ENABLED==="true"&&env.CHECKOUT_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
 app.get("/v1/products",async(req,res)=>ok(res,await listProducts(parseCatalogQuery(req.query as Record<string,string>))));
@@ -40,7 +40,7 @@ app.post("/v1/products/:slug/reviews",async(req,res)=>ok(res,await writeReview(s
 app.get("/v1/products/:slug",async(req,res)=>{const p=await getProduct(slugSchema.parse(req.params.slug));if(!p)throw new HttpError(404,"Product not found");ok(res,p);});
 app.get("/v1/categories",async(_req,res)=>ok(res,await getCategories()));app.get("/v1/brands",async(_req,res)=>ok(res,await getBrands()));
 app.get("/v1/builder/catalog",async(_req,res)=>ok(res,await getBuilderCatalog()));app.post("/v1/builder/quote",async(req,res)=>ok(res,await resolveBuild(req.body)));
-app.get("/v1/auth/session",async(_req,res)=>{const user=await currentUser();ok(res,user?{id:user._id,name:user.name,email:user.email,role:user.role}:null);});
+app.get("/v1/auth/session",async(_req,res)=>{const user=await currentUser();ok(res,user?{id:user._id,name:user.name,email:user.email,role:user.role,demoReadOnly:Boolean(user.isDemo&&user.role==="admin")}:null);});
 app.post("/v1/auth/register",async(req,res)=>ok(res,await login(req.body,true)));app.post("/v1/auth/login",async(req,res)=>ok(res,await login(req.body)));app.post("/v1/auth/logout",async(_req,res)=>{await logout();ok(res,true);});
 app.get("/v1/cart",async(_req,res)=>ok(res,await readCart()));
 app.post("/v1/cart/add",async(req,res)=>{const refs=parseReferences(req.body);if(!refs.length)throw new HttpError(400,"Select products first");const merged=mergeReferences(await readCart(),refs),products=await getProducts(merged.map(r=>r.id));if(merged.some(r=>!products.some(p=>p.slug===r.id&&p.stock>=r.quantity)))throw new HttpError(409,"Stock changed");await writeCart(merged);ok(res,true);});
@@ -48,7 +48,7 @@ app.patch("/v1/cart",async(req,res)=>{const {id,quantity}=z.object({id:slugSchem
 app.get("/v1/shipping",async(_req,res)=>ok(res,await shippingSettings()));
 app.post("/v1/checkout/review",async(req,res)=>ok(res,await reviewCheckout(checkoutSchema.parse(req.body))));app.post("/v1/checkout/confirm",async(req,res)=>ok(res,await placeOrder(z.object({token:z.string().max(30000)}).parse(req.body).token)));
 app.get("/v1/orders/:id",async(req,res)=>{const order=await ownedOrder(z.uuid().parse(req.params.id));if(!order)throw new HttpError(404,"Order not found");ok(res,order);});
-app.get("/v1/account",async(_req,res)=>{const user=await requireUser();const [builds,orders]=await Promise.all([BuildModel.find({ownerId:user._id}).sort({updatedAt:-1}).limit(100),OrderModel.find({ownerKey:`user:${user._id}`}).sort({createdAt:-1}).limit(100)]);ok(res,{user,builds,orders});});
+app.get("/v1/account",async(req,res)=>{const {accountReport}=await import("./server/account-report.ts");ok(res,await accountReport(req.query));});
 app.patch("/v1/account/profile",async(req,res)=>{const user=await requireUser();user.name=z.object({name:z.string().trim().min(2).max(80)}).parse(req.body).name;await user.save();ok(res,true);});
 app.post("/v1/account/addresses",async(req,res)=>{const user=await requireUser();const address=addressSchema.parse(req.body);if(!(await UserModel.updateOne({_id:user._id,"addresses.9":{$exists:false}},{$push:{addresses:address}})).modifiedCount)throw new HttpError(409,"Maximum ten addresses");ok(res,true);});
 app.delete("/v1/account/addresses/:index",async(req,res)=>{const user=await requireUser();user.addresses.splice(z.coerce.number().int().min(0).max(9).parse(req.params.index),1);await user.save();ok(res,true);});
@@ -61,20 +61,7 @@ app.post("/v1/auth/google/start",async(_req,res)=>ok(res,await beginGoogle()));
 app.post("/v1/auth/google/complete",async(req,res)=>ok(res,await completeGoogle(req.body)));
 app.use("/v1/admin",async(_req,_res,next)=>{await requireAdmin();next();});
 app.post("/v1/admin/mutations",async(req,res)=>{await mutateAdmin(req.body);ok(res,true);});
-app.get("/v1/admin/report",async(req,res)=>{
- await requireAdmin();const query=z.object({view:z.enum(["overview","products","orders","users","coupons","shipping","compatibility","audit"]).default("overview"),page:z.coerce.number().int().min(1).max(10000).default(1),q:z.string().max(100).default(""),id:z.string().max(100).default(""),status:z.string().max(30).default("")}).parse(req.query);const skip=(query.page-1)*20;
- if(query.view==="shipping")return ok(res,await shippingSettings());if(query.view==="compatibility")return ok(res,await compatibilitySettings());
- if(query.view==="products")return ok(res,{items:await ProductModel.find(query.q?{$text:{$search:query.q}}:{}).sort({slug:1}).skip(skip).limit(20),item:query.id?await ProductModel.findOne({slug:query.id}):null});
- if(query.view==="orders")return ok(res,{items:await OrderModel.find(orderStatuses.some(s=>s===query.status)?{status:query.status as typeof orderStatuses[number]}:{}).sort({createdAt:-1}).skip(skip).limit(20),item:query.id?await OrderModel.findById(query.id):null});
- if(query.view==="users")return ok(res,{items:await UserModel.find(query.q?{email:query.q}:{}).select("name email role disabled").sort({_id:1}).skip(skip).limit(20)});
- if(query.view==="coupons")return ok(res,{items:await CouponModel.find(query.q?{_id:query.q}:{}).sort({_id:1}).skip(skip).limit(20),item:query.id?await CouponModel.findById(query.id):null});
- if(query.view==="audit")return ok(res,{items:await AuditModel.find(query.q?{action:query.q}:{}).sort({createdAt:-1}).skip(skip).limit(20)});
- const [orders,low,pending,trend]=await Promise.all([OrderModel.aggregate([{$group:{_id:"$isSample",value:{$sum:"$totalMinor"},count:{$sum:1}}}]),ProductModel.countDocuments({active:true,stock:{$lte:5}}),OrderModel.countDocuments({status:{$ne:"Delivered"}}),OrderModel.aggregate([{$group:{_id:{$dateToString:{format:"%Y-%m",date:"$createdAt"}},value:{$sum:"$totalMinor"},orders:{$sum:1}}},{$sort:{_id:1}}])]);return ok(res,{orders,low,pending,trend});
-});
+app.get("/v1/admin/report",async(req,res)=>{const {adminReport}=await import("./server/admin-report.ts");ok(res,await adminReport(req.query));});
 app.use((_req,_res,next)=>next(new HttpError(404,"Endpoint not found")));
 app.use((error:unknown,_req:Request,res:Response,_next:NextFunction)=>{void _next;if(error instanceof z.ZodError){res.status(400).json({error:"Invalid input",fields:error.issues.map(i=>i.path.join("."))});return;}const status=error instanceof HttpError?error.status:500;res.status(status).json({error:status<500&&error instanceof Error?error.message:"Request could not be completed. Check configuration or retry."});});
 export default app;
-
-
-
-

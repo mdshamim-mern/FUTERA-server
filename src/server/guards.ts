@@ -6,3 +6,5 @@ export function commerceEnabled(){if(env.COMMERCE_ENABLED!=="true")throw new Htt
 export async function currentUser(){const id=context.getStore()?.userId;return id?UserModel.findById(id):null;}
 export async function requireUser(){commerceEnabled();const user=await currentUser();if(!user||user.disabled)throw new HttpError(401,"Please log in.");return user;}
 export async function requireAdmin(){const user=await requireUser();if(user.role!=="admin")throw new HttpError(403,"Forbidden");return user;}
+
+export function assertAdminMutationAccess(user:{isDemo?:boolean}){if(user.isDemo)throw new HttpError(403,"Demo administrator is read-only. Use an owner account to change store data.");}

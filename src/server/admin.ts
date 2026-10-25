@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import {requireAdmin} from "./guards.ts";
+import {requireAdmin,assertAdminMutationAccess} from "./guards.ts";
 import {ProductModel} from "./models/catalog.ts";
 import {CouponModel,OrderModel,UserModel,orderStatuses} from "./models/commerce.ts";
 import {AuditModel,SettingModel} from "./models/admin.ts";
@@ -8,17 +8,17 @@ import {adminMutationSchema} from "../features/admin/schema.ts";
 
 /** All admin writes enter here; authorization precedes parsing and data access. */
 export async function mutateAdmin(input:unknown){
- const actor=await requireAdmin(); const data=adminMutationSchema.parse(input);
+ const actor=await requireAdmin(); assertAdminMutationAccess(actor); const data=adminMutationSchema.parse(input);
  await SettingModel.updateOne({_id:"mutation-lock"},{$setOnInsert:{value:{},revision:0}},{upsert:true});
  await mongoose.connection.transaction(async session=>{
   // Serialize administrator changes, including role revocation, across processes.
   await SettingModel.updateOne({_id:"mutation-lock"},{$inc:{revision:1}},{session});
   const fresh=await UserModel.findOne({_id:actor._id,role:"admin",disabled:false}).session(session);
-  if(!fresh||fresh.sessionVersion!==actor.sessionVersion)throw Error("Forbidden");
+  if(!fresh||fresh.isDemo||fresh.sessionVersion!==actor.sessionVersion)throw Error("Forbidden");
   let before:unknown=null,after:unknown=null,target="";
   switch(data.operation){
    case "product": {
-    if(data.product.images.some(image=>!["/placeholders/component.svg","/placeholders/specimen.svg"].includes(image.src)))throw Error("Select a supported neutral placeholder.");
+
     const doc=await ProductModel.findOne({slug:data.product.slug}).session(session);target=data.product.slug;
     if(data.existing){
      if(!doc||doc.updatedAt.toISOString()!==data.expectedUpdatedAt)throw Error("Product changed. Reload before saving.");

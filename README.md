@@ -35,3 +35,11 @@ Demo admin sessions expose demoReadOnly. Every administrative mutation is reject
 Eight demo prices are based on retailer observations, twelve are labelled illustrative; all stock is illustrative. Demo COD creates an unpaid order, collects no payment and promises no physical delivery. Both deployed Gemini modes were verified with real answers on 25 October. Credentials and service keys remain in ignored environment files/Vercel configuration.
 
 Acceptance checks on 25 October: lint/typecheck/build pass; 174 tests in 14 files pass, including every demo admin mutation denial, other-owner isolation and account pagination.
+
+## Current sourced catalog release — 25 October 2026
+
+The active catalog now contains 20 sourced-price models across all 14 categories; ten unverified older demo models were archived with stock and order history preserved. There are no active illustrative price records. Price sources and dates are in product metadata. Referenced prices are research observations, not guaranteed retail offers. Stock and unpaid COD orders remain an educational demo.
+
+`npm run demo:curate` validates the complete replacement catalog before connecting, saves an ignored local product snapshot, and performs the source refresh and archive in one transaction. Only the isolated non-production futera_demo database is permitted. New product media must already be deployed before running it. The command preserves existing stock and does not delete orders. The earlier demo:catalog command describes the historical activation and should not replace this current curation workflow.
+
+Backend acceptance for this release: lint/typecheck/build pass; 176 tests across 15 files pass. Current-model browser fixtures can be launched using scripts/e2e-server.mjs --current and never use Atlas.

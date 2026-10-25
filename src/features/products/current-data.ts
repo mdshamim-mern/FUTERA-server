@@ -1,0 +1,7 @@
+import additions from "./current-products.json" with {type:"json"};
+import galleries from "./additional-galleries.json" with {type:"json"};
+import {demoProducts} from "./demo-data.ts";
+import {productSchema} from "./schema.ts";
+const keep=["amd-ryzen-5-7600x","amd-ryzen-7-7700x","amd-ryzen-9-7900x","amd-ryzen-9-7950x","msi-b650-gaming-plus-wifi","msi-b650m-gaming-plus-wifi","crucial-p3-plus-1000gb","crucial-p3-plus-2000gb","noctua-nh-u12s","noctua-nh-d15s"];
+export const archivedModelIds=demoProducts.filter(p=>!keep.includes(p.slug)).map(p=>p.slug);
+export const currentProducts=[...demoProducts.filter(p=>keep.includes(p.slug)).map(p=>{const images=[...p.images,...(galleries[p.slug as keyof typeof galleries]??[])];const cooler=p.category==="cpu-cooler";return productSchema.parse({...p,images,marketPrice:cooler?{amountMinor:p.slug==="noctua-nh-u12s"?550000:1600000,sourceUrl:p.slug==="noctua-nh-u12s"?"https://vibegaming.com.bd/product/noctua-nh-u12s-premium-cpu-cooler-with-1-x-nf-f12-120mm-fan/":"https://pcbstore.com.bd/brand/noctua",checkedAt:"2026-10-25",kind:"observed",note:"Published Bangladesh retailer price reference for the named standard model. Educational demo stock; no physical fulfillment."}:{...p.marketPrice!,kind:"observed"},priceMinor:cooler?(p.slug==="noctua-nh-u12s"?550000:1600000):p.priceMinor});}),...additions.map(p=>productSchema.parse(p))];

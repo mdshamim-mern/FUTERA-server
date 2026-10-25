@@ -1,0 +1,510 @@
+[
+  {
+    "slug": "corsair-cx650-2023",
+    "sku": "CAT-CORSAIR-CX650-2023",
+    "name": "Corsair CX650 650W Bronze (CP-9020278)",
+    "brand": "Corsair",
+    "category": "psu",
+    "description": "A 650W ATX supply with 80 PLUS Bronze certification. Review exact connector requirements before choosing a CPU or graphics card.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 640000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 640000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/corsair-cx650-2023/view-1.webp",
+        "alt": "Corsair CX650 650W Bronze (CP-9020278) — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply"
+      },
+      {
+        "src": "/images/products/corsair-cx650-2023/view-2.webp",
+        "alt": "Corsair CX650 650W Bronze (CP-9020278) — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply"
+      },
+      {
+        "src": "/images/products/corsair-cx650-2023/view-3.webp",
+        "alt": "Corsair CX650 650W Bronze (CP-9020278) — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply"
+      },
+      {
+        "src": "/images/products/corsair-cx650-2023/view-4.webp",
+        "alt": "Corsair CX650 650W Bronze (CP-9020278) — product view 4",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/corsair-cx-series-cx650-650w-80-plus-bronze-power-supply"
+      }
+    ],
+    "specs": {
+      "wattage": 650,
+      "formFactor": "ATX",
+      "efficiency": "80 PLUS Bronze",
+      "connectors": null,
+      "modular": false
+    }
+  },
+  {
+    "slug": "seagate-barracuda-2tb-st2000dm008",
+    "sku": "CAT-SEAGATE-BARRACUDA-2TB-ST2000DM008",
+    "name": "Seagate BarraCuda 2TB ST2000DM008",
+    "brand": "Seagate",
+    "category": "hdd",
+    "description": "A 2TB 3.5-inch desktop hard drive with a SATA interface and 7200 RPM rotational speed.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 1900000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/seagate-barracuda-2tb-7200rpm-hdd",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 1900000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/seagate-barracuda-2tb-7200rpm-hdd",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/seagate-barracuda-2tb-st2000dm008/view-1.webp",
+        "alt": "Seagate BarraCuda 2TB ST2000DM008 — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/seagate-barracuda-2tb-7200rpm-hdd"
+      },
+      {
+        "src": "/images/products/seagate-barracuda-2tb-st2000dm008/view-2.webp",
+        "alt": "Seagate BarraCuda 2TB ST2000DM008 — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/seagate-barracuda-2tb-7200rpm-hdd"
+      }
+    ],
+    "specs": {
+      "capacityGb": 2000,
+      "interface": "SATA",
+      "formFactor": "3.5 inch",
+      "rpm": 7200
+    }
+  },
+  {
+    "slug": "msi-mag-forge-321r-airflow",
+    "sku": "CAT-MSI-MAG-FORGE-321R-AIRFLOW",
+    "name": "MSI MAG FORGE 321R AIRFLOW",
+    "brand": "MSI",
+    "category": "case",
+    "description": "An ATX mid-tower with four included ARGB fans, a 160mm CPU-cooler height limit and 390mm graphics-card clearance.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 770000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 770000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/msi-mag-forge-321r-airflow/view-1.webp",
+        "alt": "MSI MAG FORGE 321R AIRFLOW — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case"
+      },
+      {
+        "src": "/images/products/msi-mag-forge-321r-airflow/view-2.webp",
+        "alt": "MSI MAG FORGE 321R AIRFLOW — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case"
+      },
+      {
+        "src": "/images/products/msi-mag-forge-321r-airflow/view-3.webp",
+        "alt": "MSI MAG FORGE 321R AIRFLOW — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case"
+      },
+      {
+        "src": "/images/products/msi-mag-forge-321r-airflow/view-4.webp",
+        "alt": "MSI MAG FORGE 321R AIRFLOW — product view 4",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-mag-forge-321r-airflow-gaming-case"
+      }
+    ],
+    "specs": {
+      "formFactor": "ATX",
+      "supportedBoards": [
+        "ATX",
+        "Micro-ATX",
+        "Mini-ITX"
+      ],
+      "gpuClearanceMm": 390,
+      "coolerHeightMm": 160,
+      "radiatorSupportMm": [
+        "120",
+        "140",
+        "240",
+        "280",
+        "360"
+      ]
+    }
+  },
+  {
+    "slug": "adata-8gb-ddr5-5600-cl46",
+    "sku": "CAT-ADATA-8GB-DDR5-5600-CL46",
+    "name": "ADATA 8GB DDR5-5600 CL46",
+    "brand": "ADATA",
+    "category": "ram",
+    "description": "A single 8GB DDR5 module running at a published 5600 MT/s. Check motherboard memory generation and support before installing.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 1680000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/adata-8gb-ddr5-5600mhz-desktop-ram",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 1680000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/adata-8gb-ddr5-5600mhz-desktop-ram",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/adata-8gb-ddr5-5600-cl46/view-1.webp",
+        "alt": "ADATA 8GB DDR5-5600 CL46 — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/adata-8gb-ddr5-5600mhz-desktop-ram"
+      },
+      {
+        "src": "/images/products/adata-8gb-ddr5-5600-cl46/view-2.webp",
+        "alt": "ADATA 8GB DDR5-5600 CL46 — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/adata-8gb-ddr5-5600mhz-desktop-ram"
+      },
+      {
+        "src": "/images/products/adata-8gb-ddr5-5600-cl46/view-3.webp",
+        "alt": "ADATA 8GB DDR5-5600 CL46 — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/adata-8gb-ddr5-5600mhz-desktop-ram"
+      }
+    ],
+    "specs": {
+      "ramType": "DDR5",
+      "capacityGb": 8,
+      "modules": 1,
+      "speedMts": 5600
+    }
+  },
+  {
+    "slug": "power-guard-pg-650va-cs",
+    "sku": "CAT-POWER-GUARD-PG-650VA-CS",
+    "name": "Power Guard PG 650VA CS",
+    "brand": "Power Guard",
+    "category": "ups",
+    "description": "An offline UPS rated at 650VA and 390W. Runtime depends on the actual connected load; no fixed runtime is promised.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 365000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/power-guard-pg-650va-cs-offline-ups",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 365000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/power-guard-pg-650va-cs-offline-ups",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/power-guard-pg-650va-cs/view-1.webp",
+        "alt": "Power Guard PG 650VA CS — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/power-guard-pg-650va-cs-offline-ups"
+      }
+    ],
+    "specs": {
+      "capacityVa": 650,
+      "wattage": 390,
+      "topology": "Offline",
+      "outlets": null
+    }
+  },
+  {
+    "slug": "arctic-f12-120mm",
+    "sku": "CAT-ARCTIC-F12-120MM",
+    "name": "ARCTIC F12 120mm",
+    "brand": "ARCTIC",
+    "category": "case-fan",
+    "description": "A 120mm case fan with a three-pin connector, published 1350 RPM speed and 53 CFM airflow.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 90000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/arctic-f12-casing-fan",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 90000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/arctic-f12-casing-fan",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/arctic-f12-120mm/view-1.webp",
+        "alt": "ARCTIC F12 120mm — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/arctic-f12-casing-fan"
+      },
+      {
+        "src": "/images/products/arctic-f12-120mm/view-2.webp",
+        "alt": "ARCTIC F12 120mm — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/arctic-f12-casing-fan"
+      }
+    ],
+    "specs": {
+      "sizeMm": 120,
+      "maxRpm": 1350,
+      "airflowCfm": 53,
+      "connector": "3-pin"
+    }
+  },
+  {
+    "slug": "fantech-go-k211-bangla",
+    "sku": "CAT-FANTECH-GO-K211-BANGLA",
+    "name": "Fantech GO K211 Bangla",
+    "brand": "Fantech",
+    "category": "keyboard",
+    "description": "A full-size 104-key wired USB keyboard with English and Bangla legends and a 1.5m cable.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 40000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/fantech-go-k211-bangla-keyboard",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 40000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/fantech-go-k211-bangla-keyboard",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/fantech-go-k211-bangla/view-1.webp",
+        "alt": "Fantech GO K211 Bangla — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/fantech-go-k211-bangla-keyboard"
+      }
+    ],
+    "specs": {
+      "layout": "Full-size English/Bangla",
+      "switchType": null,
+      "connectivity": [
+        "USB"
+      ],
+      "backlight": null
+    }
+  },
+  {
+    "slug": "logitech-g102-lightsync-black",
+    "sku": "CAT-LOGITECH-G102-LIGHTSYNC-BLACK",
+    "name": "Logitech G102 LIGHTSYNC Black",
+    "brand": "Logitech",
+    "category": "mouse",
+    "description": "A wired six-button gaming mouse with an adjustable sensor up to 8000 DPI and LIGHTSYNC lighting.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 187500,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/logitech-g102-lightsync-gaming-mouse",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 187500,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/logitech-g102-lightsync-gaming-mouse",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/logitech-g102-lightsync-black/view-1.webp",
+        "alt": "Logitech G102 LIGHTSYNC Black — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/logitech-g102-lightsync-gaming-mouse"
+      },
+      {
+        "src": "/images/products/logitech-g102-lightsync-black/view-2.webp",
+        "alt": "Logitech G102 LIGHTSYNC Black — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/logitech-g102-lightsync-gaming-mouse"
+      },
+      {
+        "src": "/images/products/logitech-g102-lightsync-black/view-3.webp",
+        "alt": "Logitech G102 LIGHTSYNC Black — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/logitech-g102-lightsync-gaming-mouse"
+      }
+    ],
+    "specs": {
+      "maxDpi": 8000,
+      "weightGrams": 85,
+      "connectivity": [
+        "USB"
+      ],
+      "buttons": 6
+    }
+  },
+  {
+    "slug": "msi-pro-mp225-e12l",
+    "sku": "CAT-MSI-PRO-MP225-E12L",
+    "name": "MSI PRO MP225 E12L 22-inch 120Hz",
+    "brand": "MSI",
+    "category": "monitor",
+    "description": "A Full HD IPS display with a published 120Hz refresh rate and HDMI/VGA inputs for a compact desktop workspace.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 1080000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 1080000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/msi-pro-mp225-e12l/view-1.webp",
+        "alt": "MSI PRO MP225 E12L 22-inch 120Hz — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor"
+      },
+      {
+        "src": "/images/products/msi-pro-mp225-e12l/view-2.webp",
+        "alt": "MSI PRO MP225 E12L 22-inch 120Hz — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor"
+      },
+      {
+        "src": "/images/products/msi-pro-mp225-e12l/view-3.webp",
+        "alt": "MSI PRO MP225 E12L 22-inch 120Hz — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor"
+      },
+      {
+        "src": "/images/products/msi-pro-mp225-e12l/view-4.webp",
+        "alt": "MSI PRO MP225 E12L 22-inch 120Hz — product view 4",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/msi-pro-mp225-e12l-22-inch-fhd-monitor"
+      }
+    ],
+    "specs": {
+      "diagonalInches": 21.5,
+      "resolution": "1920x1080",
+      "refreshHz": 120,
+      "panel": "IPS",
+      "ports": [
+        "HDMI",
+        "VGA"
+      ]
+    }
+  },
+  {
+    "slug": "gigabyte-rtx-3050-windforce-oc-v2-6gb",
+    "sku": "CAT-GIGABYTE-RTX-3050-WINDFORCE-OC-V2-6GB",
+    "name": "Gigabyte RTX 3050 WINDFORCE OC V2 6GB",
+    "brand": "Gigabyte",
+    "category": "gpu",
+    "description": "A 6GB GDDR6 graphics card with two HDMI and two DisplayPort outputs. Confirm power and physical fit using the manufacturer documentation.",
+    "isDemo": true,
+    "isReference": false,
+    "isSample": false,
+    "priceMinor": 3900000,
+    "stock": 12,
+    "active": true,
+    "featured": true,
+    "sourceUrl": "https://www.gigabyte.com/Graphics-Card/GV-N3050WF2OCV2-6GD/sp",
+    "reviewedAt": "2026-10-25",
+    "marketPrice": {
+      "amountMinor": 3900000,
+      "kind": "observed",
+      "sourceUrl": "https://www.startech.com.bd/gigabyte-geforce-rtx-3050-windforce-oc-v2-6gb-graphics-card",
+      "checkedAt": "2026-10-25",
+      "note": "Published retailer cash-price reference observed on this date. Educational demo inventory; no retailer affiliation, payment or physical delivery."
+    },
+    "images": [
+      {
+        "src": "/images/products/gigabyte-rtx-3050-windforce-oc-v2-6gb/view-1.webp",
+        "alt": "Gigabyte RTX 3050 WINDFORCE OC V2 6GB — product view 1",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/gigabyte-geforce-rtx-3050-windforce-oc-v2-6gb-graphics-card"
+      },
+      {
+        "src": "/images/products/gigabyte-rtx-3050-windforce-oc-v2-6gb/view-2.webp",
+        "alt": "Gigabyte RTX 3050 WINDFORCE OC V2 6GB — product view 2",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/gigabyte-geforce-rtx-3050-windforce-oc-v2-6gb-graphics-card"
+      },
+      {
+        "src": "/images/products/gigabyte-rtx-3050-windforce-oc-v2-6gb/view-3.webp",
+        "alt": "Gigabyte RTX 3050 WINDFORCE OC V2 6GB — product view 3",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/gigabyte-geforce-rtx-3050-windforce-oc-v2-6gb-graphics-card"
+      },
+      {
+        "src": "/images/products/gigabyte-rtx-3050-windforce-oc-v2-6gb/view-4.webp",
+        "alt": "Gigabyte RTX 3050 WINDFORCE OC V2 6GB — product view 4",
+        "credit": "Product media via Star Tech",
+        "sourceUrl": "https://www.startech.com.bd/gigabyte-geforce-rtx-3050-windforce-oc-v2-6gb-graphics-card"
+      }
+    ],
+    "specs": {
+      "vramGb": 6,
+      "lengthMm": 191,
+      "tdp": null,
+      "connectors": []
+    }
+  }
+]

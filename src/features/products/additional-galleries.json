@@ -1,0 +1,58 @@
+{
+  "msi-b650-gaming-plus-wifi": [
+    {
+      "src": "/images/products/msi-b650-gaming-plus-wifi/gallery-2.webp",
+      "alt": "msi b650 gaming plus wifi — product angle 2",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650-gaming-plus-wifi-motherboard"
+    },
+    {
+      "src": "/images/products/msi-b650-gaming-plus-wifi/gallery-3.webp",
+      "alt": "msi b650 gaming plus wifi — product angle 3",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650-gaming-plus-wifi-motherboard"
+    },
+    {
+      "src": "/images/products/msi-b650-gaming-plus-wifi/gallery-4.webp",
+      "alt": "msi b650 gaming plus wifi — product angle 4",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650-gaming-plus-wifi-motherboard"
+    }
+  ],
+  "msi-b650m-gaming-plus-wifi": [
+    {
+      "src": "/images/products/msi-b650m-gaming-plus-wifi/gallery-2.webp",
+      "alt": "msi b650m gaming plus wifi — product angle 2",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650m-gaming-plus-wifi-motherboard"
+    },
+    {
+      "src": "/images/products/msi-b650m-gaming-plus-wifi/gallery-3.webp",
+      "alt": "msi b650m gaming plus wifi — product angle 3",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650m-gaming-plus-wifi-motherboard"
+    },
+    {
+      "src": "/images/products/msi-b650m-gaming-plus-wifi/gallery-4.webp",
+      "alt": "msi b650m gaming plus wifi — product angle 4",
+      "credit": "Product media via Star Tech",
+      "sourceUrl": "https://www.startech.com.bd/msi-b650m-gaming-plus-wifi-motherboard"
+    }
+  ],
+  "noctua-nh-u12s": [
+    {
+      "src": "/images/products/noctua-nh-u12s/package-angle.webp",
+      "alt": "noctua nh u12s — additional manufacturer photograph",
+      "credit": "Noctua product media; cropped from information sheet",
+      "sourceUrl": "https://cdn.noctua.at/media/noctua_nh_u12s_infosheet_en_web.pdf"
+    }
+  ],
+  "noctua-nh-d15s": [
+    {
+      "src": "/images/products/noctua-nh-d15s/package-angle.webp",
+      "alt": "noctua nh d15s — additional manufacturer photograph",
+      "credit": "Noctua product media; cropped from information sheet",
+      "sourceUrl": "https://cdn.noctua.at/media/noctua_nh_d15s_infosheet_cn.pdf?download=true"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ app.use("/v1",async(req,res,next)=>{res.setHeader("Cache-Control","no-store");if
 const ok=(res:Response,data:unknown)=>res.json({data});
 app.get("/v1/demo/account",async(_req,res)=>{if(env.DEMO_LOGIN_ENABLED!=="true"||env.MONGODB_DB!=="futera_demo")throw new HttpError(404,"Not available");await requireDemoAccount();ok(res,{email:"customer@futera.example.test",password:"Futera-Demo-Customer-2026!",admin:await UserModel.exists({email:"admin@futera.example.test",role:"admin",isDemo:true,disabled:false})?{email:"admin@futera.example.test",password:"Futera-Demo-ReadOnly-2026!"}:null});});
 async function requireDemoAccount(){const {connectDatabase}=await import("./lib/db.ts");await connectDatabase();if(!await UserModel.exists({email:"customer@futera.example.test",role:"customer",isDemo:true,disabled:false}))throw new HttpError(503,"Demo account not activated.");}
-app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",checkoutEnabled:env.COMMERCE_ENABLED==="true"&&env.CHECKOUT_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled()}));
+app.get("/v1/config",(_req,res)=>ok(res,{commerceEnabled:env.COMMERCE_ENABLED==="true",checkoutEnabled:env.COMMERCE_ENABLED==="true"&&env.CHECKOUT_ENABLED==="true",googleEnabled:googleEnabled(),aiEnabled:aiEnabled(),testPaymentsEnabled:env.MONGODB_DB==="futera_demo"}));
 app.get("/v1/products",async(req,res)=>ok(res,await listProducts(parseCatalogQuery(req.query as Record<string,string>))));
 app.get("/v1/products/by-ids",async(req,res)=>ok(res,await getProducts(z.string().max(3000).parse(req.query.ids??"").split(",").filter(Boolean).slice(0,100))));
 app.get("/v1/products/:slug/reviews",async(req,res)=>ok(res,await listReviews(slugSchema.parse(req.params.slug),z.coerce.number().int().min(1).max(10000).parse(req.query.page??1))));
@@ -60,6 +60,8 @@ app.post("/v1/ai/advice",async(req,res)=>ok(res,await advice(req.body)));
 app.post("/v1/auth/google/start",async(_req,res)=>ok(res,await beginGoogle()));
 app.post("/v1/auth/google/complete",async(req,res)=>ok(res,await completeGoogle(req.body)));
 app.use("/v1/admin",async(_req,_res,next)=>{await requireAdmin();next();});
+app.get("/v1/admin/assessment",async(req,res)=>{const {assessmentReport}=await import("./server/assessment.ts");ok(res,await assessmentReport(req.query));});
+app.post("/v1/admin/assessment",async(req,res)=>{const {mutateAssessment}=await import("./server/assessment.ts");ok(res,await mutateAssessment(req.body));});
 app.post("/v1/admin/mutations",async(req,res)=>{await mutateAdmin(req.body);ok(res,true);});
 app.get("/v1/admin/report",async(req,res)=>{const {adminReport}=await import("./server/admin-report.ts");ok(res,await adminReport(req.query));});
 app.use((_req,_res,next)=>next(new HttpError(404,"Endpoint not found")));

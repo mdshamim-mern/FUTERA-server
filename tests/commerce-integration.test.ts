@@ -5,9 +5,10 @@ import {MongoMemoryReplSet} from "mongodb-memory-server";
 import {randomUUID} from "node:crypto";
 const identity=vi.hoisted(()=>({id:""}));
 vi.mock("@/platform",()=>({context:{getStore:()=>({userId:identity.id})},cookies:async()=>({get:()=>undefined,set:vi.fn(),delete:vi.fn()})}));
-vi.mock("@/lib/env",()=>({env:{COMMERCE_ENABLED:"true",CHECKOUT_ENABLED:"true",APP_URL:"http://localhost:3100",AUTH_SECRET:"TEST-ONLY-not-a-deployment-secret-123456789",SHIPPING_HOME_MINOR:10000,SHIPPING_PICKUP_MINOR:0}}));
+vi.mock("@/lib/env",()=>({env:{COMMERCE_ENABLED:"true",CHECKOUT_ENABLED:"true",MONGODB_DB:"futera_demo",APP_URL:"http://localhost:3100",AUTH_SECRET:"TEST-ONLY-not-a-deployment-secret-123456789",SHIPPING_HOME_MINOR:10000,SHIPPING_PICKUP_MINOR:0}}));
 vi.mock("@/lib/db",()=>({connectDatabase:async()=>mongoose}));
 import {UserModel,CartModel,OrderModel,BuildModel,CouponModel,commerceModels} from "@/server/models/commerce";
+import {AssessmentModel,assessmentReport,mutateAssessment} from "@/server/assessment";
 import {mutateAdmin} from "@/server/admin";
 
 import {adminModels,AuditModel,SettingModel} from "@/server/models/admin";
@@ -23,9 +24,9 @@ import {mergeReferences} from "@/server/cart";
 let replica:MongoMemoryReplSet;
 const district=locations[0].districts[0];
 const input:CheckoutInput={address:{name:"SAMPLE Buyer",phone:"01000000000",division:locations[0].id,district:district.id,upazila:district.upazilas[0].id,street:"SAMPLE test address"},method:"home",coupon:"",payment:"COD"};
-beforeAll(async()=>{replica=await MongoMemoryReplSet.create({instanceOpts:[{launchTimeout:60000}],binary:{version:"8.2.6"},replSet:{count:1}});await mongoose.connect(replica.getUri(),{dbName:"futera_unit_sample"});await Promise.all([...commerceModels,...adminModels,ProductModel].map(m=>m.createIndexes()));},180000);
+beforeAll(async()=>{replica=await MongoMemoryReplSet.create({instanceOpts:[{launchTimeout:60000}],binary:{version:"8.2.6"},replSet:{count:1}});await mongoose.connect(replica.getUri(),{dbName:"futera_unit_sample"});await Promise.all([...commerceModels,...adminModels,AssessmentModel,ProductModel].map(m=>m.createIndexes()));},180000);
 afterAll(async()=>{await mongoose.disconnect();await replica?.stop();});
-beforeEach(async()=>{await Promise.all([...commerceModels,...adminModels,ProductModel].map(m=>m.collection.deleteMany({})));identity.id=randomUUID();await UserModel.create({_id:identity.id,name:"SAMPLE",email:"sample@example.test",passwordHash:"test-only",role:"customer"});await ProductModel.create(sampleProducts.find(p=>p.slug==="sample-cpu-03")!);await CartModel.create({_id:`user:${identity.id}`,refs:[{id:"sample-cpu-03",quantity:1}]});});
+beforeEach(async()=>{await Promise.all([...commerceModels,...adminModels,AssessmentModel,ProductModel].map(m=>m.collection.deleteMany({})));identity.id=randomUUID();await UserModel.create({_id:identity.id,name:"SAMPLE",email:"sample@example.test",passwordHash:"test-only",role:"customer"});await ProductModel.create(sampleProducts.find(p=>p.slug==="sample-cpu-03")!);await CartModel.create({_id:`user:${identity.id}`,refs:[{id:"sample-cpu-03",quantity:1}]});});
 it("blocks unauthenticated, disabled and non-admin guards",async()=>{await expect(requireAdmin()).rejects.toThrow("Forbidden");await UserModel.updateOne({_id:identity.id},{$set:{disabled:true}});await expect(requireUser()).rejects.toThrow();identity.id="";await expect(requireUser()).rejects.toThrow();});
 it("blocks another user's build reads and mutations and private order reads",async()=>{
   const id=randomUUID();await BuildModel.create({_id:id,ownerId:"another-user",name:"Private",refs:[]});expect(await ownedBuild(id)).toBeNull();
@@ -117,3 +118,27 @@ it("compatibility overrides cannot claim ok or suppress unknown checks",async()=
 it("blocks every shared demo admin mutation without changing inventory or audit",async()=>{await UserModel.updateOne({_id:identity.id},{$set:{role:"admin",isDemo:true}});for(const operation of ["product","archive","inventory","coupon","shipping","compatibility","role","order"]){await expect(mutateAdmin({operation})).rejects.toMatchObject({status:403});}expect((await ProductModel.findOne())?.stock).toBe(5);expect(await AuditModel.countDocuments()).toBe(0);});
 it("paginates and filters account records while excluding other owners",async()=>{const {accountReport}=await import("../src/server/account-report.ts");await BuildModel.insertMany(Array.from({length:23},(_,i)=>({_id:randomUUID(),ownerId:identity.id,name:"Build "+i,refs:[]})));await BuildModel.create({_id:randomUUID(),ownerId:"private-owner",name:"Private Build",refs:[]});const second=await accountReport({buildPage:"2"});expect(second.builds).toHaveLength(3);expect(second.pagination.builds.pages).toBe(2);expect(second.counts.builds).toBe(23);expect((await accountReport({q:"Private"})).builds).toHaveLength(0);expect((await accountReport({q:"Build 22"})).builds).toHaveLength(1);});
 it("scopes demo administrator reports and order detail to demo customers",async()=>{const {adminReport}=await import("../src/server/admin-report.ts");const privateOrder=randomUUID();await OrderModel.create({_id:privateOrder,ownerKey:"user:private-owner",requestId:randomUUID(),address:input.address,method:"home",lines:[],timeline:[]});await UserModel.updateOne({_id:identity.id},{$set:{role:"admin",isDemo:true}});expect((await adminReport({view:"orders"})).items).toHaveLength(0);await expect(adminReport({view:"orders",id:privateOrder})).rejects.toMatchObject({status:404});const users=await adminReport({view:"users"});expect(users.items).toHaveLength(1);expect(users.items?.[0]).not.toHaveProperty("passwordHash");expect(users.items?.[0]).not.toHaveProperty("addresses");});
+
+it("allows demo-admin assessment CRUD while preserving the actual catalog and isolating owners",async()=>{
+ await expect(assessmentReport({})).rejects.toMatchObject({status:403});
+ await UserModel.updateOne({_id:identity.id},{$set:{role:"admin",isDemo:true}});
+ const before=await ProductModel.findOne().lean();
+ await mutateAssessment({operation:"create",revision:0,source:"sample-cpu-03",slug:"assessment-copy"});
+ const first=await assessmentReport({q:"assessment-copy"});expect(first.total).toBe(1);
+ await mutateAssessment({operation:"update",revision:1,slug:"assessment-copy",name:"SAMPLE Assessment CPU",description:"An assessment workspace product copy.",priceMinor:250000,stock:12});
+ expect((await assessmentReport({})).items[0].stock).toBe(12);expect((await ProductModel.findOne().lean())?.stock).toBe(before!.stock);
+ await expect(mutateAssessment({operation:"delete",revision:1,slug:"assessment-copy"})).rejects.toMatchObject({status:409});
+ const firstId=identity.id;identity.id=randomUUID();await UserModel.create({_id:identity.id,name:"Second admin",email:"assessment-other@example.test",passwordHash:"test-only",role:"admin"});
+ expect((await assessmentReport({})).items).toHaveLength(0);await expect(mutateAssessment({operation:"delete",revision:0,slug:"assessment-copy"})).rejects.toMatchObject({status:404});
+ identity.id=firstId;await mutateAssessment({operation:"delete",revision:2,slug:"assessment-copy"});expect((await assessmentReport({})).total).toBe(0);expect((await assessmentReport({})).events).toHaveLength(3);
+ await expect(mutateAssessment({operation:"create",revision:3,source:"sample-cpu-03",slug:"x",ownerId:"someone-else"})).rejects.toThrow();
+ await mutateAssessment({operation:"reset",revision:3});expect(await ProductModel.countDocuments()).toBe(1);expect(await OrderModel.countDocuments()).toBe(0);
+});
+it("blocks disabled and anonymous users from assessment reads and writes",async()=>{
+ await UserModel.updateOne({_id:identity.id},{$set:{role:"admin",disabled:true}});await expect(assessmentReport({})).rejects.toMatchObject({status:401});await expect(mutateAssessment({operation:"reset",revision:0})).rejects.toMatchObject({status:401});identity.id="";await expect(assessmentReport({})).rejects.toMatchObject({status:401});
+});
+
+
+for(const payment of ["TEST_BKASH","TEST_NAGAD","TEST_CARD"] as const){it(`records ${payment} approval only as an unpaid test order`,async()=>{const review=await reviewCheckout({...input,payment,testOutcome:"approved"});const id=await placeOrder(review.token);const order=await OrderModel.findById(id);expect(order?.payment).toBe(payment);expect(order?.paymentStatus).toBe("unpaid");expect(order?.isTestPayment).toBe(true);expect(await placeOrder(review.token)).toBe(id);expect(await OrderModel.countDocuments()).toBe(1);});}
+for(const testOutcome of ["declined","cancelled"] as const){it(`keeps stock, cart and coupons unchanged when a local payment test is ${testOutcome}`,async()=>{const review=await reviewCheckout({...input,payment:"TEST_CARD",testOutcome});await expect(placeOrder(review.token)).rejects.toMatchObject({status:400});expect(await OrderModel.countDocuments()).toBe(0);expect((await ProductModel.findOne())?.stock).toBe(5);expect((await CartModel.findOne())?.refs).toHaveLength(1);});}
+it("blocks local test payments against non-demo inventory",async()=>{await ProductModel.updateOne({slug:"sample-cpu-03"},{$set:{isSample:false,isDemo:false,name:"Actual product"}});await expect(reviewCheckout({...input,payment:"TEST_BKASH"})).rejects.toMatchObject({status:403});expect(await OrderModel.countDocuments()).toBe(0);});
